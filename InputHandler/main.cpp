@@ -14,7 +14,7 @@ int main() {
         scpp::CanFrame cf_to_write;
 
         cf_to_write.id = 1;
-        cf_to_write.len = 2;
+        cf_to_write.len = 8;
         int input_array[cf_to_write.len];
         ncurseInput(input_array);
 
