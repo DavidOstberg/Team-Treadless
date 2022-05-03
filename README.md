@@ -18,7 +18,7 @@ one executable with at least two thread:
 ## User cases
 
 
-## Emulation Functions
+## Emulator Functions
 
 Max speed = 300 km/h
 Idle = 800 rpm
