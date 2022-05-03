@@ -17,3 +17,22 @@ one executable with at least two thread:
 
 ## User cases
 
+
+## Emulation Functions
+
+Max speed = 300 km/h
+Idle = 800 rpm
+
+throttleRatio = maxSpeed / maxThrottle
+
+speed = throttle * throttleRatio
+
+|  Gear  | Speed (km/h) |      RMP      |
+| ------ |:------------:|:-------------:|
+|    N   |      0       |     0 -  800  |
+|    1   |    0 -  60   |   800 - 4500  |
+|    2   |   61 -  80   |  3136 - 4500  |
+|    3   |   81 - 118   |  3109 - 4500  |
+|    4   |  119 - 170   |  3147 - 4500  |
+|    5   |  171 - 200   |  3780 - 4500  |
+|    6   |  200 - 300   |  3000 - 4500  |
