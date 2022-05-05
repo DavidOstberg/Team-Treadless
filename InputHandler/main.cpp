@@ -16,7 +16,7 @@ int main() {
 
         cf_to_write.id = 1;
         cf_to_write.len = 8;
-        int input_array[cf_to_write.len];
+        uint8_t input_array[cf_to_write.len];
         ncurseInput(input_array);
         //if key is pressed
         //then call nucrseinput

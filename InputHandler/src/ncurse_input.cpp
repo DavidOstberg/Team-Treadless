@@ -3,7 +3,7 @@
 #define lenOfFrame 8
 #define activeCell 3
 
-void ncurseInput(int array[]) {
+void ncurseInput(uint8_t array[]) {
     initscr();
     int ch;
     for (int i=0;i<lenOfFrame;i++) {
