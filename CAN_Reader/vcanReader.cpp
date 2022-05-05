@@ -1,15 +1,13 @@
 #include <iostream>
-#include <string>
 #include <decoding.hpp>
 
-#include "socketcan_cpp.h"
+#include <socketcan_cpp.h>
 // https://github.com/siposcsaba89/socketcan-cpp
 
-bool decodeStart();
-int decodeGear();
-int decodeThrottle();
+using namespace std;
 
 int main() {
+    decoding decode;
     scpp::SocketCan sockat_can;
     if (sockat_can.open("vcan0") != scpp::STATUS_OK) {
         std::cout << "Cannot open vcan0." << std::endl;
@@ -18,13 +16,13 @@ int main() {
     }
     while (true) {
         scpp::CanFrame fr;
-        if (sockat_can.read(fr) == scpp::STATUS_OK) {            
+        if (sockat_can.read(fr) == scpp::STATUS_OK) {        
             printf("len %d byte, id: %d, data: %02x %02x %02x %02x %02x %02x %02x %02x  \n", fr.len, fr.id, 
                 fr.data[0], fr.data[1], fr.data[2], fr.data[3],
                 fr.data[4], fr.data[5], fr.data[6], fr.data[7]);
-            cout << "Start: " << decodeStart() << endl;
-            cout << "Gear: " << (int) decodeGear() << endl;
-            cout << "Throttle: " << decodeThrottle() << endl;
+            cout << "Ignition: " << decode.decodeStart(fr.data[0]) << endl;
+            cout << "Gear: " << (int) decode.decodeGear(fr.data[1]) << endl;
+            cout << "Throttle: " << decode.decodeThrottle(fr.data[2]) << endl;
         } else {
             for (size_t i = 0; i < 9999; i++); //STUPID SLEEP?
         }

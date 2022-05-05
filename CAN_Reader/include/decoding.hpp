@@ -1,3 +1,6 @@
+#ifndef DECODING_HPP
+#define DECODING_HPP
+
 #include <iostream>
 #include <socketcan_cpp.h>
 
@@ -9,8 +12,8 @@
 #define park 112
 #define reverse 114
 #define on 115
-#define decelerate 258
-#define accelerate 259
+#define decelerate 28   //258
+#define accelerate 29   //259
 
 using namespace std;
 
@@ -22,10 +25,10 @@ public:
     bool ignition = false;
     int throttle[size] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
     int *ptr = throttle;
-    gears gear;
+    gears gear = gears::Park;
 
-    bool decodeStart(scpp::CanFrame &fr)   {
-        switch (fr.data[0])
+    bool decodeStart(const uint8_t &ignitionRequest)   {
+        switch (ignitionRequest)
         {
         case on:   //user press 's' for start
             ignition = true;
@@ -40,8 +43,8 @@ public:
     return ignition;
     }
 
-    gears decodeGear(scpp::CanFrame &fr)   {
-        switch (fr.data[1])
+    gears decodeGear(const uint8_t &gearRequest)   {
+        switch (gearRequest)
         {
         case park:   //user press 'p' for park
             gear = gears::Park;
@@ -62,13 +65,15 @@ public:
     return gear;
     }
 
-    int decodeThrottle(scpp::CanFrame &fr)   {
-        switch (fr.data[2])
+    int decodeThrottle(const uint8_t &throttleRequest)   {
+        switch (throttleRequest)
         {
         case accelerate:   //user press arrow up to increase throttle
+            if(*ptr < 100)
             ptr++;
             break;
         case decelerate:   //user press arrow down to decrease throttle
+            if(*ptr > 0)
             ptr--;
             break;
 
@@ -79,3 +84,5 @@ public:
     }
 
 };
+
+#endif  //DECODING_HPP
