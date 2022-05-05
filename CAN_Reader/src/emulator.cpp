@@ -1,52 +1,60 @@
-#include <iostream>
-#include <future>
-#include <thread>
-#include "decoding.hpp"
 #include "emulator.h"
 
-
-
-int main (){
-int speed = 0;
-int rmp = 0;
-
-
-//IGNITION CONDITION
-// if (ignition == true){   // do it with ? and :
-//     return speed = 0 && rmp = 800;
-// }else{
-//     return(-1)
-// }
-
-decodeStart(1);
-
-while(ignition){
-    switch(gear){
-        case 0: //Park
-            speed = 0;
-            rmp = idle;
-            break;
-        case 1:  //Reverse only gear1 - max 60km/h
-            speed = getSpeed(*ptr);  //*ptr from decoding.h
-            rpm = getRPM()
-            break;
-        case 2:  // Neutral
-            speed = 0;
-            rmp = idle;
-            break;
-        case 3:   // Drive
-            CalculateSpeed();
-            break;
-        default:
-            break;
+int getSpeed(int &t)
+{
+    double speed;
+    if(t<50)
+    {
+    speed = t*1.2;
+    return speed;
+    }
+    else
+    {
+    speed = t*2;
+    return speed;
     }
 }
 
+int getRPM(int &s)
+{
+   int rpm;
+   if(s<100)
+    {
+    rpm = (s*13)+900;
+    return rpm;
+    }
+    else
+    {
+    rpm = s*31;
+    return rpm;
+    }
+}
 
-// if (ignition == true && (gear = gears::Drive || gear = gears::Reverse)){
+int getIgnition(int &getStart){
 
-// }
+    decoding canInput;
+    uint8_t ignition = canInput.decodeStart(decodedStart);
 
-
-    return 0;
+    while(ignition){ //if ignition is ON
+        switch(decodedGear){
+            case 0: //Park
+                speed = 0;
+                rpm = idle;
+                break;
+            case 1:  //Reverse only gear1 - max 60km/h
+                speed = getSpeed(decodedThrottle);  //*ptr from decoding.h
+                rpm = getRPM(speed);
+                break;
+            case 2:  // Neutral
+                speed = 0;
+                rpm = idle;
+                break;
+            case 3:   // Drive
+                speed = getSpeed(decodedThrottle);  //*ptr from decoding.h
+                rpm = getRPM(speed);
+                break;
+            default:
+                break;
+        }
+    }
 }
