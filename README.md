@@ -16,7 +16,16 @@ one executable with at least two thread:
 
 
 ## User cases
+Case  0: Enginer is off. No Ignition [0,0,0]
 
+Case 1: Engine ON. Ignition  [1,0,0]
+	
+	Case 1.1: Parking - default - no throttle [1,0,0] Speed == 0, rmp != 0
+	Case 1.2: Neutral - no throttle (==P)  [1,2,0]  Speed == 0, rmp != 0
+	(Throttle != 0 && Speed !=0)
+		Case 1.3.1: Gear 1 - reverse && drive  [1,1,!=0] && [1,3,!=0]
+		Case 1.3.2: Gear > 1 - Drive [1,3,!=0]
+	(Throttle == 0 && Speed > 0) hard stop
 
 ## Emulator Functions
 
