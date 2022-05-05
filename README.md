@@ -1,5 +1,8 @@
 # Team-Treadless
 Team members: Beatriz de Castro Diez, Can Yang, David Östberg, Leo Zuckerman
+
+(Goal Sprint 1: Input Handler.)
+
 (Goal Sprint 2: CAN reader and Input Handler.)
 ## Working area
 | Applications  | Team member         |
@@ -11,21 +14,54 @@ Team members: Beatriz de Castro Diez, Can Yang, David Östberg, Leo Zuckerman
 ## Project description
 One executable receiving  user input transmitting CAN messages.
 one executable with at least two thread:
-- one reading  CAN data
-- emulation
+- One reading  CAN data
+- Emulation
 
 
 ## User cases
 Case  0: Enginer is off. No Ignition [0,0,0]
 
 Case 1: Engine ON. Ignition  [1,0,0]
-	
+
 	Case 1.1: Parking - default - no throttle [1,0,0] Speed == 0, rmp != 0
 	Case 1.2: Neutral - no throttle (==P)  [1,2,0]  Speed == 0, rmp != 0
 	(Throttle != 0 && Speed !=0)
 		Case 1.3.1: Gear 1 - reverse && drive  [1,1,!=0] && [1,3,!=0]
 		Case 1.3.2: Gear > 1 - Drive [1,3,!=0]
 	(Throttle == 0 && Speed > 0) hard stop
+keyboard input -> Input handler --vcan--> CAN reader | Emulator --vcan--> Dashboard
+
+## Input Hander
+Keyboard mapping:
+S- Start
+O- stop
+P- Gear in Park
+R- Gear in Reverse
+N- Gear in Neutral
+D- Gear in Drive
+8(with numlock) - Acceleration
+2(with numlock) - Deceleration
+
+Input handler is sending the CAN frame with ignition status, Gear state and padle status to the CAN reader.
+Ignition status, Gear state and padle status are captured by keyboard input as user operation.
+Each CAN frame is three valid data and there are 5 reserved space for future needs.(Current design)
+
+## CAN reader
+
+CAN reader takes the raw data from input handler and convert to readable data.
+
+The log format:
+len 8 byte, id: 1, data: 66 66 66 00 00 00 00 00
+Ignition: 0
+Gear: 0
+Throttle: 0
+
+## Where are we
+
+
+keyboard input -> Input handler --vcan--> CAN reader ->logging
+
+## User cases
 
 ## Emulator Functions
 
