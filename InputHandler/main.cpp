@@ -1,5 +1,6 @@
 #include "vcanwriter.hpp"
 
+
 int main() {
     scpp::SocketCan sockat_can;
 
@@ -17,6 +18,10 @@ int main() {
         cf_to_write.len = 8;
         int input_array[cf_to_write.len];
         ncurseInput(input_array);
+        //if key is pressed
+        //then call nucrseinput
+        //else sending old data
+        //cf_to_write.data[i] =input_array[i];
 
         for (int i = 0; i < (cf_to_write.len); i++)
             //cf_to_write.data[i] = std::rand() % 256;
