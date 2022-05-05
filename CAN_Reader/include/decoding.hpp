@@ -2,21 +2,22 @@
 #define DECODING_HPP
 
 #include <iostream>
-#include <socketcan_cpp.h>
+#include "socketcan_cpp.h"
 
 #define size 11
 
-#define drive 100
-#define neutral 110
-#define off 111
-#define park 112
-#define reverse 114
-#define on 115
-#define decelerate 28   //258
-#define accelerate 29   //259
+const static int drive = 100;
+const static int neutral = 110;
+const static int off = 111;
+const static int park = 112;
+const static int reverse = 114;
+const static int on = 115;
+const static int decelerate = 50;   //258
+const static int accelerate = 56;   //259
 
 using namespace std;
 
+int decodedStart, decodedGear, decodedThrottle;
 
 enum class gears {Park, Reverse, Neutral, Drive};
 
