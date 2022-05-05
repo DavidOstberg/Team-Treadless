@@ -2,4 +2,4 @@
 //#include <iostream>
 #define lenOfFrame 8
 
-void ncurseInput(int array[]);
+void ncurseInput(uint8_t array[]);
