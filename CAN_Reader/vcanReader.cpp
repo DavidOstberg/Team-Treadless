@@ -6,8 +6,6 @@
 
 using namespace std;
 
-int getSpeed();
-
 int main() {
     decoding decode;
     scpp::SocketCan sockat_can;
