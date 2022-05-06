@@ -1,6 +1,6 @@
 #include "emulator.h"
 
-int getSpeed(int &t)
+int GetSpeed(int &t)
 {
     double speed;
     if(t<50)
@@ -15,7 +15,7 @@ int getSpeed(int &t)
     }
 }
 
-int getRPM(int &s)
+int GetRPM(int &s)
 {
    int rpm;
    if(s<100)
@@ -30,31 +30,42 @@ int getRPM(int &s)
     }
 }
 
-int getIgnition(int &getStart){
+void GetIgnition(void *arg){
 
     decoding canInput;
     uint8_t ignition = canInput.decodeStart(decodedStart);
 
     while(ignition){ //if ignition is ON
         switch(decodedGear){
-            case 0: //Park
+            case 'P': //Park
                 speed = 0;
                 rpm = idle;
                 break;
-            case 1:  //Reverse only gear1 - max 60km/h
-                speed = getSpeed(decodedThrottle);  //*ptr from decoding.h
-                rpm = getRPM(speed);
+            case 'R':  //Reverse only gear1 - max 60km/h
+                speed = GetSpeed(decodedThrottle);  //*ptr from decoding.h
+                rpm = GetRPM(speed);
                 break;
-            case 2:  // Neutral
+            case 'N':  // Neutral
                 speed = 0;
                 rpm = idle;
                 break;
-            case 3:   // Drive
-                speed = getSpeed(decodedThrottle);  //*ptr from decoding.h
-                rpm = getRPM(speed);
+            case 'D':   // Drive
+                speed = GetSpeed(decodedThrottle);  //*ptr from decoding.h
+                rpm = GetRPM(speed);
                 break;
             default:
                 break;
         }
     }
 }
+
+
+/*------- in MAIN -------
+pthread_t temulator;
+if(0 != pthread_create(&temulator, NULL, GetIgnition, &getStart))
+return -1;
+
+pthread_join(temulator, NULL);
+*/
+
+//std::thread temulator(GetIgnition);
