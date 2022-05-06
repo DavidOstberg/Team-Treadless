@@ -4,8 +4,10 @@
 #include <iostream>
 #include "socketcan_cpp.h"
 
-#define size 11
+const static int size = 11;
 
+const static int minThrottle = 0;
+const static int maxThrottle = 100;
 const static int drive = 100;
 const static int neutral = 110;
 const static int off = 111;
@@ -19,14 +21,12 @@ using namespace std;
 
 int decodedStart, decodedGear, decodedThrottle;
 
-enum class gears {Park, Reverse, Neutral, Drive};
-
 class decoding {
 public:
     bool ignition = false;
     int throttle[size] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
     int *ptr = throttle;
-    gears gear = gears::Park;
+    char gear = 'P';
 
     bool decodeStart(const uint8_t &ignitionRequest)   {
         switch (ignitionRequest)
@@ -44,20 +44,20 @@ public:
     return ignition;
     }
 
-    gears decodeGear(const uint8_t &gearRequest)   {
+    char decodeGear(const uint8_t &gearRequest)   {
         switch (gearRequest)
         {
         case park:   //user press 'p' for park
-            gear = gears::Park;
+            gear = 'P';
             break;
         case reverse:   //user press 'r' for reverse
-            gear = gears::Reverse;
+            gear = 'R';
             break;
         case neutral:     //user press 'n' for neutral
-            gear = gears::Neutral;
+            gear = 'N';
             break;
         case drive:   //user press 'd' for drive
-            gear = gears::Drive;
+            gear = 'D';
             break;
         
         default:
@@ -70,11 +70,11 @@ public:
         switch (throttleRequest)
         {
         case accelerate:   //user press arrow up to increase throttle
-            if(*ptr < 100)
+            if(*ptr < maxThrottle)
             ptr++;
             break;
         case decelerate:   //user press arrow down to decrease throttle
-            if(*ptr > 0)
+            if(*ptr > minThrottle)
             ptr--;
             break;
 
