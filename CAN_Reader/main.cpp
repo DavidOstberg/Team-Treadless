@@ -1,5 +1,6 @@
 #include <iostream>
 #include "decoding.hpp"
+#include "emulator.h"
 
 #include "socketcan_cpp.h"
 // https://github.com/siposcsaba89/socketcan-cpp
@@ -33,5 +34,9 @@ int main() {
             for (size_t i = 0; i < 9999; i++); //STUPID SLEEP?
         }
     }
+
+    // int s = GetSpeed(decodedThrottle);
+    // std::cout << s << std::endl;
+
     return 0;
 }

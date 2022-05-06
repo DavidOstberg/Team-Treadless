@@ -6,18 +6,18 @@
 #include <thread>
 #include "decoding.hpp"
 
-const static uint8_t idle;
-const static uint8_t maxSpeed = 300;
-const static uint8_t maxThrottle = 90;    //throttle[max]
-const static uint8_t throttleRatio = maxSpeed / maxThrottle;
+const static int idle = 800;
+//const static uint8_t max_speed = 300;
+//const static uint8_t maxThrottle = 90;    //throttle[max]
+//const static uint8_t throttleRatio = maxSpeed / maxThrottle; // added in new main
 
 int speed = 0;
 int rpm = 0;
 
-int getSpeed(int &t);
+int GetSpeed(int &t);
 
-int getRPM(int &s);
+int GetRPM(int &s);
 
-int getIgnition(int &getStart);
+int GetIgnition(int &getStart);
 
 #endif //EMULATOR_H
