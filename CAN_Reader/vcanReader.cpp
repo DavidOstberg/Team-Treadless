@@ -6,6 +6,8 @@
 
 using namespace std;
 
+int getSpeed();
+
 int main() {
     decoding decode;
     scpp::SocketCan sockat_can;
@@ -22,12 +24,13 @@ int main() {
                 fr.data[4], fr.data[5], fr.data[6], fr.data[7]);
 
             decodedStart = decode.decodeStart(fr.data[0]);
-            decodedGear = (int) decode.decodeGear(fr.data[1]);
+            decodedGear = decode.decodeGear(fr.data[1]);
             decodedThrottle = decode.decodeThrottle(fr.data[2]);
 
             cout << "Ignition: " << decodedStart << endl;
-            cout << "Gear: " << (int) decodedGear << endl;
+            cout << "Gear: " << (char) decodedGear << endl;
             cout << "Throttle: " << decodedThrottle << endl;
+
         } else {
             for (size_t i = 0; i < 9999; i++); //STUPID SLEEP?
         }
