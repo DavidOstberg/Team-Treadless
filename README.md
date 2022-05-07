@@ -22,6 +22,7 @@ keyboard input -> Input handler --vcan--> CAN reader | Emulator --vcan--> Dashbo
 
 ## Input Hander
 Keyboard mapping:
+
 S- Start
 
 O- stop
@@ -48,10 +49,15 @@ Each CAN frame is three valid data and there are 5 reserved space for future nee
 CAN reader takes the raw data from input handler and convert to readable data.
 
 The log format:
-len 8 byte, id: 1, data: 66 66 66 00 00 00 00 00
+
+len 8 byte, id: 1, data: 00 00 00 00 00 00 00 00
+
 Ignition: 0
+
 Gear: 0
+
 Throttle: 0
+
 
 ## Where are we
 
@@ -89,3 +95,4 @@ speed = throttle * throttleRatio
 |    4   |  119 - 170   |  3147 - 4500  |
 |    5   |  171 - 200   |  3780 - 4500  |
 |    6   |  200 - 300   |  3000 - 4500  |
+

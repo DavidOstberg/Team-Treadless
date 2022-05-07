@@ -1,5 +1,6 @@
+#ifndef NCURSESINPUT_HPP
+#define NCURSESINPUT_HPP
 #include <curses.h>
-//#include <iostream>
-#define lenOfFrame 8
 
 void ncurseInput(uint8_t array[]);
+#endif

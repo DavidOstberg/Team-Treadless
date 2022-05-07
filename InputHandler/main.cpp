@@ -1,9 +1,14 @@
-#include "vcanwriter.hpp"
+#include <iostream>
+#include "socketcan_cpp.h"
+#include "ncurseInput.hpp"
 
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
 int main() {
     scpp::SocketCan sockat_can;
-
+    uint8_t input_array[8]{};
 
     if (sockat_can.open("vcan0") != scpp::STATUS_OK) {
         std::cout << "Cannot open vcan0." << std::endl;
@@ -16,16 +21,10 @@ int main() {
 
         cf_to_write.id = 1;
         cf_to_write.len = 8;
-        uint8_t input_array[cf_to_write.len];
-        ncurseInput(input_array);
-        //if key is pressed
-        //then call nucrseinput
-        //else sending old data
-        //cf_to_write.data[i] =input_array[i];
 
-        for (int i = 0; i < (cf_to_write.len); i++)
-            //cf_to_write.data[i] = std::rand() % 256;
-            cf_to_write.data[i] =input_array[i];
+        ncurseInput(input_array);
+
+        memcpy(cf_to_write.data, input_array, sizeof(input_array));
 
         auto write_sc_status = sockat_can.write(cf_to_write);
         if (write_sc_status != scpp::STATUS_OK)
