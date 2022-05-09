@@ -1,6 +1,6 @@
 #ifndef EFUNTIONS_H
 #define EFUNTIONS_H
 
-void reader();
+void Reader();
 
 #endif  //EFUNTIONS_H

@@ -118,7 +118,7 @@ void GetIgnition(void *arg){
 }
 
 
-void reader(){
+void Reader(){
     if (sockat_can.open("vcan0") != scpp::STATUS_OK) {
             std::cout << "Cannot open vcan0." << std::endl;
             std::cout << "Check whether the vcan0 interface is up!" << std::endl;
