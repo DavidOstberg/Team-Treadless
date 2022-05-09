@@ -1,9 +1,36 @@
 #include <curses.h>
 #include <iostream>
-#define lenOfFrame 8
-#define activeCell 3
+#include "keyMapping.hpp"
+#include "ncurseInput.hpp"
 
-void ncurseInput(uint8_t array[]) {
+void ncurseInput(uint8_t array[])
+{
+
+    int ch;
+    initscr();
+
+    if (((ch) = getch()) != ERR)
+    {
+        if (ch == key_s ||ch == key_o)
+        {
+            array[0] = ch;
+        }
+        else if (ch == key_d || ch == key_r || ch == key_p || ch == key_n)
+        {
+            array[1] = ch;
+        }
+        else if (ch == key_up || ch == key_down)
+        {
+            array[2] = ch;
+        }
+        else
+        {
+            std::cout << "not valid input \n";
+        }
+    }
+}
+
+/*void ncurseInput(uint8_t array[]) {
     initscr();
     int ch;
     for (int i=0;i<lenOfFrame;i++) {
@@ -20,5 +47,5 @@ void ncurseInput(uint8_t array[]) {
             }
     }
 
-    //endwin();
-}
+
+}*/
