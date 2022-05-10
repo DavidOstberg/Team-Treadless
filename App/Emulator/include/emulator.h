@@ -25,35 +25,54 @@ const static int max_speed = 300;
 //const static uint8_t max_throttle = 90;    //throttle[max]
 const static int throttle_ratio = max_speed / max_throttle; // added in new main
 
-int speed = 0;
-int rpm = 0;
-int gear_numb = 0;
+const static float kmh_mph = 0.62;
 
-int decoded_start, decoded_gear, decoded_throttle;
+// int speed = 0;
+// int rpm = 0;
+// int gear_num = 0;
 
-class decoding {
+int decoded_start, decoded_gear_stick, decoded_throttle;
+
+class Decoding {
 public:
-    bool ignition = false;
-    int throttle, throttle_delta = 5;
-    char gear = 'P';
+    bool ignition;
+    int throttle, throttle_delta;
+    char gear_stick;
+
+    friend class Emulator;
+
+public:
+    Decoding ();
 
     bool DecodeStart(const uint8_t &ignition_request);
 
-    char DecodeGear(const uint8_t &gear_request);
+    char DecodeGearStick(const uint8_t &gear_stick_request);
 
     int DecodeThrottle(const uint8_t &throttle_request);
 
 };
 
-decoding decode;
+class Emulator{
+    public:
+    //int decoded_start, decoded_gear, decoded_throttle;
+    int speed;
+    int rpm;
+    int gear_num;
+
+    //Emulator() = default;
+    Emulator();
+
+    int GetSpeed(int &throttle_get);
+    int GetGearNum(int &speed_get);
+    int GetRPM(int &speed_get, int &gear_num_get);
+    void GetIgnition(/* void *arg */);
+};
+
+Decoding decode;
 scpp::SocketCan sockat_can;
+scpp::CanFrame fr;
+Emulator em;
 
-int GetSpeed(int &t);
 
-int GetRPM(int &s, int gear_numb);
-
-int GetIgnition(int &getStart);
-
-int GetGearNumb(int &s);
 
 #endif //EMULATOR_H
