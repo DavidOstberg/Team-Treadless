@@ -6,7 +6,6 @@ project(main VERSION 1.0)
 
 add_subdirectory(lib/socketCAN)
 add_subdirectory(App)
-# add_subdirectory(App/Emulator)
 
 file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/App/InputHandler/CMakeLists.txt" LOC_PATH)
 file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/lib/socketCAN/CMakeLists.txt" LOC_PATH)
