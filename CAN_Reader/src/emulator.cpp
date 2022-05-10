@@ -44,19 +44,20 @@ int decoding::DecodeThrottle(const uint8_t &throttle_request)   {
         switch (throttle_request)
         {
         case accelerate:   //user press arrow up to increase throttle
-            if(*ptr < max_throttle)
-            ptr++;
+            if(throttle < max_throttle)
+            throttle += throttle_delta;
             break;
         case decelerate:   //user press arrow down to decrease throttle
-            if(*ptr > min_throttle)
-            ptr--;
+            if(throttle > min_throttle)
+            throttle -= throttle_delta;;
             break;
 
         default:
             break;
         }
-    return *ptr;
+    return throttle;
     }
+ 
 
 int GetSpeed(int &t)
 {

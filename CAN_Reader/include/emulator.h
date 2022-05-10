@@ -9,8 +9,6 @@
 
 using namespace std;
 
-const static int size = 11;
-
 const static int min_throttle = 0;
 const static int max_throttle = 100;
 const static int drive = 100;
@@ -35,8 +33,7 @@ int decoded_start, decoded_gear, decoded_throttle;
 class decoding {
 public:
     bool ignition = false;
-    int throttle[size] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    int *ptr = throttle;
+    int throttle, throttle_delta = 5;
     char gear = 'P';
 
     bool DecodeStart(const uint8_t &ignition_request);
