@@ -27,6 +27,7 @@ const static int throttle_ratio = max_speed / max_throttle; // added in new main
 
 int speed = 0;
 int rpm = 0;
+int gear_numb = 0;
 
 int decoded_start, decoded_gear, decoded_throttle;
 
@@ -49,8 +50,10 @@ scpp::SocketCan sockat_can;
 
 int GetSpeed(int &t);
 
-int GetRPM(int &s);
+int GetRPM(int &s, int gear_numb);
 
 int GetIgnition(int &getStart);
+
+int GetGearNumb(int &s);
 
 #endif //EMULATOR_H

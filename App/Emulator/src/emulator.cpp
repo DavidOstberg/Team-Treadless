@@ -1,7 +1,6 @@
 #include "emulator.h"
 
 
-
 bool decoding::DecodeStart(const uint8_t &ignition_request)   {
         switch (ignition_request)
         {
@@ -58,7 +57,6 @@ int decoding::DecodeThrottle(const uint8_t &throttle_request)   {
     return throttle;
     }
  
-
 int GetSpeed(int &t)
 {
     double speed;
@@ -74,20 +72,86 @@ int GetSpeed(int &t)
     }
 }
 
-int GetRPM(int &s)
+int GetGearNumb(int &s)
 {
-   int rpm;
-   if(s<max_throttle)
+    if(0 < s < 33)
     {
-    rpm = (s*13)+idle;
-    return rpm;
+    gear_numb = 1;
+    return gear_numb;
     }
-    else
+    if(33 <= s < 66)
     {
-    rpm = s*31;
-    return rpm;
+    gear_numb = 2;
+    return gear_numb;
     }
+    if(66 <= s < 100)
+    {
+    gear_numb = 3;
+    return gear_numb;
+    }
+    if(100 <= s < 133)
+    {
+    gear_numb = 4;
+    return gear_numb;
+    }
+    if(133 <= s < 166)
+    {
+    gear_numb = 5;
+    return gear_numb;
+    }
+    if(166 <= s)
+    {
+    gear_numb = 6;
+    return gear_numb;
+    }  
+    
 }
+// D
+int GetRPM(int &s, int gear_numb)
+{
+//    int rpm;
+//    if(s<max_throttle)
+//     {
+//     rpm = (s*13)+idle;
+//     return rpm;
+//     }
+//     else
+//     {
+//     rpm = s*31;
+//     return rpm;
+//     }
+    if(gear_numb == 1 && s<33)
+        {
+        rpm = (s*33)+idle;
+        return rpm;
+        }
+    else if(gear_numb == 2 && s<66)
+        {
+        rpm = (s*15)+idle;
+        return rpm;
+        }
+     else if(gear_numb == 3 && s<100)
+        {
+        rpm = (s*12)+idle;
+        return rpm;
+        }
+    else if(gear_numb == 4 && s<133)
+        {
+        rpm = (s*10)+idle;
+        return rpm;
+        }
+    else if(gear_numb == 5 && s<166)
+        {
+        rpm = (s*10)+idle;
+        return rpm;
+        }
+    else if(gear_numb == 6 && s<200)
+        {
+        rpm = (s*14)+idle;
+        return rpm;
+        }    
+}
+
 
 void GetIgnition(void *arg){
 
@@ -102,7 +166,7 @@ void GetIgnition(void *arg){
                 break;
             case 'R':  //Reverse only gear1 - max 60km/h
                 speed = GetSpeed(decoded_throttle);  //*ptr from decoding.h
-                rpm = GetRPM(speed);
+                rpm = GetRPM(speed, gear_numb);
                 break;
             case 'N':  // Neutral
                 speed = 0;
@@ -110,7 +174,7 @@ void GetIgnition(void *arg){
                 break;
             case 'D':   // Drive
                 speed = GetSpeed(decoded_throttle);  //*ptr from decoding.h
-                rpm = GetRPM(speed);
+                rpm = GetRPM(speed, gear_numb);
                 break;
             default:
                 break;
@@ -137,9 +201,14 @@ void Reader(){
                 decoded_throttle = decode.DecodeThrottle(fr.data[2]);
 
                 cout << "Ignition: " << decoded_start << endl;
-                cout << "Gear: " << (char) decoded_gear << endl;
+                cout << "Gear Stick: " << (char) decoded_gear << endl;
                 cout << "Throttle: " << decoded_throttle << endl;
+
                 cout << "Speed = " << GetSpeed(decoded_throttle) << endl;
+                cout << "Gear = " << GetGearNumb(speed) << endl;
+                cout << "RPM = " << GetRPM(speed, gear_numb) << endl;
+
+                
 
             } else {
                 for (size_t i = 0; i < 9999; i++); //STUPID SLEEP?
@@ -152,7 +221,6 @@ void Reader(){
 pthread_t temulator;
 if(0 != pthread_create(&temulator, NULL, GetIgnition, &getStart))
 return -1;
-
 pthread_join(temulator, NULL);
 */
 
