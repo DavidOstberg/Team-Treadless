@@ -1,0 +1,8 @@
+Install the below packages (apt install):
+
+    qt5-default
+    qtdeclarative5-dev
+    qtquickcontrols2-5-dev
+    libgles2-mesa-dev
+    qml-module-qtquick-controls
+    qml-module-qtquick-extras
