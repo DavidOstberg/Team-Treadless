@@ -39,9 +39,9 @@ public:
     int throttle, throttle_delta;
     char gear_stick;
 
-    friend class Emulator;
+    //friend class Emulator;
 
-public:
+//public:
     Decoding ();
 
     bool DecodeStart(const uint8_t &ignition_request);
@@ -67,11 +67,6 @@ class Emulator{
     int GetRPM(int &speed_get, int &gear_num_get);
     void GetIgnition(/* void *arg */);
 };
-
-Decoding decode;
-scpp::SocketCan sockat_can;
-scpp::CanFrame fr;
-Emulator em;
 
 
 

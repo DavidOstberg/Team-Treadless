@@ -67,13 +67,18 @@ int Decoding::DecodeThrottle(const uint8_t &throttle_request)   {
 
 // -------------  READER Function  -------------
 void Reader(){
+    Decoding decode;
+    scpp::SocketCan sockat_can;
+    scpp::CanFrame fr;
+    Emulator emulator;
+
     if (sockat_can.open("vcan0") != scpp::STATUS_OK) {
             std::cout << "Cannot open vcan0." << std::endl;
             std::cout << "Check whether the vcan0 interface is up!" << std::endl;
             exit (-1);
         }
         while (true) {
-            scpp::CanFrame fr;
+            //scpp::CanFrame fr;   ?????????
             if (sockat_can.read(fr) == scpp::STATUS_OK) { 
                 cout << endl;       
                 printf("len %d byte, id: %d, data: %02x %02x %02x %02x %02x %02x %02x %02x  \n", fr.len, fr.id, 
@@ -81,18 +86,14 @@ void Reader(){
                     fr.data[4], fr.data[5], fr.data[6], fr.data[7]);
 
                 decoded_start = decode.DecodeStart(fr.data[0]);
-                 decoded_gear_stick = decode.DecodeGearStick(fr.data[1]);
+                decoded_gear_stick = decode.DecodeGearStick(fr.data[1]);
                 decoded_throttle = decode.DecodeThrottle(fr.data[2]);
 
                 cout << "Ignition: " << decoded_start << endl;
                 cout << "Gear Stick: " << (char)  decoded_gear_stick << endl;
                 cout << "Throttle: " << decoded_throttle << endl;
 
-                em.GetIgnition();
-
-                /* cout << "Speed = " << GetSpeed(decode.DecodeThrottle(fr.data[2]) << endl;
-                cout << "Gear No = " << GetGearNum(speed) << endl;
-                cout << "RPM = " << GetRPM(speed, gear_num) << endl; */
+                emulator.GetIgnition();
 
             } else {
                 for (size_t i = 0; i < 9999; i++); //STUPID SLEEP?
@@ -101,6 +102,8 @@ void Reader(){
 }
 
 // -------------  EMULATOR Functions  -------------
+
+/* Emulator emulator; */
 
 Emulator::Emulator(){
     this -> speed = 0;
@@ -156,26 +159,26 @@ int Emulator::GetSpeed(int &throttle_get)
 
 int Emulator::GetGearNum(int &speed_get)
 {
-    if(0 < speed_get <= 60){
+    if(speed_get >= 0 && speed_get <= 60){
         gear_num = 1;
     }
-    else if(60 < speed_get <= 80){
+    else if(speed_get > 60 && speed_get <= 80){
         gear_num = 2;
     }
-    else if(80 < speed_get <= 118){
+    else if(speed_get > 80 && speed_get <= 118){
         gear_num = 3;
     }
-    else if(118 < speed_get <= 170){
+    else if(speed_get > 118 && speed_get <= 170){
         gear_num = 4;
     }
-    else if(170 < speed_get <= 200){
+    else if(speed_get > 170 && speed_get <= 200){
         gear_num = 5;
     }
     else if(200 < speed_get){
         gear_num = 6;
     } 
     else{
-        return 7;
+        std::cout << "Transmission failure";
     } 
     return gear_num;
 }
