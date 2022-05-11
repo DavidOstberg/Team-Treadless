@@ -69,5 +69,7 @@ class Emulator{
 };
 
 
+//testing for sending to dashboard
+void SendToDashboard();
 
 #endif //EMULATOR_H
