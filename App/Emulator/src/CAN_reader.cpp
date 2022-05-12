@@ -1,7 +1,7 @@
 #include "reader.h"
 #include "emulator.h"
 
-Decoded Reader(Decoded &_decoded)
+void Reader(Decoded *_decoded, std::atomic<bool> *_exit_flag)
 {
     Decoding decode;
     scpp::SocketCan sockat_can;
@@ -20,9 +20,8 @@ Decoded Reader(Decoded &_decoded)
         exit(-1);
     }
 
-    int repeat=500;
-    int j =0;
-    while (j<repeat)
+
+    while (!_exit_flag->load())
     {
         //scpp::CanFrame fr;   ?????????
         if (sockat_can.read(fr) == scpp::STATUS_OK)
@@ -32,14 +31,14 @@ Decoded Reader(Decoded &_decoded)
                    fr.data[0], fr.data[1], fr.data[2], fr.data[3],
                    fr.data[4], fr.data[5], fr.data[6], fr.data[7]);
 
-            _decoded.decoded_start = decode.DecodeStart(fr.data[0]);
-            _decoded.decoded_gear_stick = decode.DecodeGearStick(fr.data[1]);
-            _decoded.decoded_throttle = decode.DecodeThrottle(fr.data[2]);
+            _decoded->decoded_start = decode.DecodeStart(fr.data[0]);
+            _decoded->decoded_gear_stick = decode.DecodeGearStick(fr.data[1]);
+            _decoded->decoded_throttle = decode.DecodeThrottle(fr.data[2]);
 
 
-            std::cout << "Ignition: " << _decoded.decoded_start << std::endl;
-            std::cout << "Gear Stick: " << (char)_decoded.decoded_gear_stick << std::endl;
-            std::cout << "Throttle: " << _decoded.decoded_throttle << std::endl;
+            std::cout << "Ignition: " << _decoded->decoded_start << std::endl;
+            std::cout << "Gear Stick: " << (char)_decoded->decoded_gear_stick << std::endl;
+            std::cout << "Throttle: " << _decoded->decoded_throttle << std::endl;
 
             // emulator.GetSpeedRPMGearLevel(decoded_start, decoded_gear_stick, decoded_throttle);
 
@@ -48,13 +47,12 @@ Decoded Reader(Decoded &_decoded)
         {
 
             // std::cout << "hello"<<std::endl;
-            SendToDashboard(_decoded.decoded_start);
+            SendToDashboard(_decoded->decoded_start);
             for (size_t i = 0; i < 9999; i++)
                 ; //STUPID SLEEP?
         }
-        j++;
     }
-    return _decoded;
+   // return *_decoded;
 }
 
 /***Send to dashboard for testing*****************/

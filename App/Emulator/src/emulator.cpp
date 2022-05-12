@@ -2,11 +2,11 @@
 
 // -------------  EMULATOR Functions  -------------
 
-void Engine_Transmission(Decoded _start_gearstick_throttle)  {
+void Engine_Transmission(Decoded *_start_gearstick_throttle, std::atomic<bool> *_exit_flag)  {
     Emulator emulator;
         std::cout<<"we are in engine_transmition";
 
-    emulator.GetSpeedRPMGearLevel(_start_gearstick_throttle);
+    emulator.GetSpeedRPMGearLevel(_start_gearstick_throttle,_exit_flag);
 
 
 }
@@ -26,21 +26,21 @@ Emulator::Emulator(){
     };
     emulator engine;*/
 
-void Emulator::GetSpeedRPMGearLevel(Decoded _start_gearstick_throttle)
+void Emulator::GetSpeedRPMGearLevel(Decoded *_start_gearstick_throttle, std::atomic<bool> *_exit_flag)
 {
-while (true)
+while (!_exit_flag->load())
 {
 
 
-    if(_start_gearstick_throttle.decoded_start){
-        switch( _start_gearstick_throttle.decoded_gear_stick){
+    if(_start_gearstick_throttle->decoded_start){
+        switch( _start_gearstick_throttle->decoded_gear_stick){
             case 'P': //Park
                 speed = 0;
                 rpm = idle;
 
                 break;
             case 'R':  //Reverse only gear 1 - max 60km/h
-                speed = GetSpeed(_start_gearstick_throttle.decoded_throttle);
+                speed = GetSpeed(_start_gearstick_throttle->decoded_throttle);
                 rpm = GetRPM(speed, gear_num);
                 break;
             case 'N':  // Neutral
@@ -48,13 +48,13 @@ while (true)
                 rpm = idle;
                 break;
             case 'D':   // Drives
-                speed = GetSpeed(_start_gearstick_throttle.decoded_throttle);
+                speed = GetSpeed(_start_gearstick_throttle->decoded_throttle);
                 gear_num = GetGearNum(speed);
                 rpm = GetRPM(speed, gear_num);
                 std::cout << "Speed = " << speed << std::endl;
                 std::cout << "Gear No = " << gear_num << std::endl;
                 std::cout << "RPM = " << rpm << std::endl;
-                std::cout << "throtthle is"<<_start_gearstick_throttle.decoded_throttle <<std::endl;
+                std::cout << "throtthle is"<<_start_gearstick_throttle->decoded_throttle <<std::endl;
                 std::this_thread::sleep_for(std::chrono::seconds(1));
                 break;
 

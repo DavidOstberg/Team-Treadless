@@ -12,7 +12,8 @@ add_executable(vcanReader
 )
 
 
-target_link_libraries(vcanReader PUBLIC socketCanlib)
+target_link_libraries(vcanReader PUBLIC socketCanlib
+                                        pthread)
 target_include_directories(vcanReader PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 

@@ -7,6 +7,7 @@
 #include "reader.h"
 
 
+
 const static int min_throttle = 0;
 const static int max_throttle = 100;
 const static int drive = 100;
@@ -56,7 +57,7 @@ public:
     int GetSpeed(int &throttle_get);
     int GetGearNum(int &speed_get);
     int GetRPM(int &speed_get, int &gear_num_get);
-    void GetSpeedRPMGearLevel(Decoded);
+    void GetSpeedRPMGearLevel(Decoded*, std::atomic<bool> *);
 };
 
 
