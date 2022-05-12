@@ -2,6 +2,15 @@
 
 // -------------  EMULATOR Functions  -------------
 
+void Engine_Transmission(Decoded _start_gearstick_throttle)  {
+    Emulator emulator;
+        std::cout<<"we are in engine_transmition";
+
+    emulator.GetSpeedRPMGearLevel(_start_gearstick_throttle);
+
+
+}
+
 /* Emulator emulator; */
 
 Emulator::Emulator(){
@@ -17,31 +26,36 @@ Emulator::Emulator(){
     };
     emulator engine;*/
 
-void Emulator::GetSpeedRPMGearLevel(int decoded_start,int decoded_gear_stick,int decoded_throttle)
+void Emulator::GetSpeedRPMGearLevel(Decoded _start_gearstick_throttle)
+{
+while (true)
 {
 
 
-    if(decoded_start){
-        switch( decoded_gear_stick){
+    if(_start_gearstick_throttle.decoded_start){
+        switch( _start_gearstick_throttle.decoded_gear_stick){
             case 'P': //Park
                 speed = 0;
                 rpm = idle;
 
                 break;
             case 'R':  //Reverse only gear 1 - max 60km/h
-                speed = GetSpeed(decoded_throttle);
+                speed = GetSpeed(_start_gearstick_throttle.decoded_throttle);
                 rpm = GetRPM(speed, gear_num);
                 break;
             case 'N':  // Neutral
                 speed = 0;
                 rpm = idle;
                 break;
-            case 'D':   // Drive
-                speed = GetSpeed(decoded_throttle);
+            case 'D':   // Drives
+                speed = GetSpeed(_start_gearstick_throttle.decoded_throttle);
                 gear_num = GetGearNum(speed);
                 rpm = GetRPM(speed, gear_num);
+                std::cout << "Speed = " << speed << std::endl;
+                std::cout << "Gear No = " << gear_num << std::endl;
+                std::cout << "RPM = " << rpm << std::endl;
 
-                break;
+
             default:
                 break;
             std::cout << "Speed = " << speed << std::endl;
@@ -50,6 +64,7 @@ void Emulator::GetSpeedRPMGearLevel(int decoded_start,int decoded_gear_stick,int
         }
         //return engine
     }
+}
 }
 
 int Emulator::GetSpeed(int &throttle_get)

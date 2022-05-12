@@ -1,11 +1,13 @@
-#ifndef EFUNTIONS_H
-#define EFUNTIONS_H
+#ifndef EFUNCTIONS_H
+#define EFUNCTIONS_H
 
 #include "socketcan_cpp.h"
-
-void Reader();
+struct Decoded {
+    int decoded_start, decoded_gear_stick, decoded_throttle;
+    };
+Decoded Reader();
 //testing for sending to dashboard
 void SendToDashboard(int);
 
 
-#endif  //EFUNTIONS_H
+#endif  //EFUNCTIONS_H

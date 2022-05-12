@@ -1,18 +1,15 @@
 #include "reader.h"
 #include "emulator.h"
 
-void Reader()
+Decoded Reader()
 {
     Decoding decode;
     scpp::SocketCan sockat_can;
     scpp::SocketCan socket_dash;
 
     scpp::CanFrame fr;
-    Emulator emulator;
 
-    int decoded_start;
-    int decoded_gear_stick;
-    int decoded_throttle;
+    Decoded decoded;
 
     unsigned int input_handler_fr_id =1;
 
@@ -23,7 +20,9 @@ void Reader()
         exit(-1);
     }
 
-    while (true)
+    int repeat=500;
+    int j =0;
+    while (j<repeat)
     {
         //scpp::CanFrame fr;   ?????????
         if (sockat_can.read(fr) == scpp::STATUS_OK)
@@ -33,26 +32,29 @@ void Reader()
                    fr.data[0], fr.data[1], fr.data[2], fr.data[3],
                    fr.data[4], fr.data[5], fr.data[6], fr.data[7]);
 
-            decoded_start = decode.DecodeStart(fr.data[0]);
-            decoded_gear_stick = decode.DecodeGearStick(fr.data[1]);
-            decoded_throttle = decode.DecodeThrottle(fr.data[2]);
+            decoded.decoded_start = decode.DecodeStart(fr.data[0]);
+            decoded.decoded_gear_stick = decode.DecodeGearStick(fr.data[1]);
+            decoded.decoded_throttle = decode.DecodeThrottle(fr.data[2]);
 
-            std::cout << "Ignition: " << decoded_start << std::endl;
-            std::cout << "Gear Stick: " << (char)decoded_gear_stick << std::endl;
-            std::cout << "Throttle: " << decoded_throttle << std::endl;
 
-            emulator.GetSpeedRPMGearLevel(decoded_start, decoded_gear_stick, decoded_throttle);
+            // std::cout << "Ignition: " << decoded_start << std::endl;
+            // std::cout << "Gear Stick: " << (char)decoded_gear_stick << std::endl;
+            // std::cout << "Throttle: " << decoded_throttle << std::endl;
+
+            // emulator.GetSpeedRPMGearLevel(decoded_start, decoded_gear_stick, decoded_throttle);
 
         }
         else
         {
 
             // std::cout << "hello"<<std::endl;
-            SendToDashboard(decoded_start);
+            SendToDashboard(decoded.decoded_start);
             for (size_t i = 0; i < 9999; i++)
                 ; //STUPID SLEEP?
         }
+        j++;
     }
+    return decoded;
 }
 
 /***Send to dashboard for testing*****************/

@@ -56,7 +56,7 @@ public:
     int GetSpeed(int &throttle_get);
     int GetGearNum(int &speed_get);
     int GetRPM(int &speed_get, int &gear_num_get);
-    void GetSpeedRPMGearLevel(int, int, int);
+    void GetSpeedRPMGearLevel(Decoded);
 };
 
 
