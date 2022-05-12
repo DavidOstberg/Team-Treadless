@@ -54,13 +54,14 @@ while (true)
                 std::cout << "Speed = " << speed << std::endl;
                 std::cout << "Gear No = " << gear_num << std::endl;
                 std::cout << "RPM = " << rpm << std::endl;
+                std::cout << "throtthle is"<<_start_gearstick_throttle.decoded_throttle <<std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                break;
 
 
             default:
                 break;
-            std::cout << "Speed = " << speed << std::endl;
-            std::cout << "Gear No = " << gear_num << std::endl;
-            std::cout << "RPM = " << rpm << std::endl;
+
         }
         //return engine
     }

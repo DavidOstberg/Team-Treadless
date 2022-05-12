@@ -1,7 +1,7 @@
 #include "reader.h"
 #include "emulator.h"
 
-Decoded Reader()
+Decoded Reader(Decoded &_decoded)
 {
     Decoding decode;
     scpp::SocketCan sockat_can;
@@ -9,7 +9,7 @@ Decoded Reader()
 
     scpp::CanFrame fr;
 
-    Decoded decoded;
+    //Decoded decoded;
 
     unsigned int input_handler_fr_id =1;
 
@@ -32,14 +32,14 @@ Decoded Reader()
                    fr.data[0], fr.data[1], fr.data[2], fr.data[3],
                    fr.data[4], fr.data[5], fr.data[6], fr.data[7]);
 
-            decoded.decoded_start = decode.DecodeStart(fr.data[0]);
-            decoded.decoded_gear_stick = decode.DecodeGearStick(fr.data[1]);
-            decoded.decoded_throttle = decode.DecodeThrottle(fr.data[2]);
+            _decoded.decoded_start = decode.DecodeStart(fr.data[0]);
+            _decoded.decoded_gear_stick = decode.DecodeGearStick(fr.data[1]);
+            _decoded.decoded_throttle = decode.DecodeThrottle(fr.data[2]);
 
 
-            // std::cout << "Ignition: " << decoded_start << std::endl;
-            // std::cout << "Gear Stick: " << (char)decoded_gear_stick << std::endl;
-            // std::cout << "Throttle: " << decoded_throttle << std::endl;
+            std::cout << "Ignition: " << _decoded.decoded_start << std::endl;
+            std::cout << "Gear Stick: " << (char)_decoded.decoded_gear_stick << std::endl;
+            std::cout << "Throttle: " << _decoded.decoded_throttle << std::endl;
 
             // emulator.GetSpeedRPMGearLevel(decoded_start, decoded_gear_stick, decoded_throttle);
 
@@ -48,13 +48,13 @@ Decoded Reader()
         {
 
             // std::cout << "hello"<<std::endl;
-            SendToDashboard(decoded.decoded_start);
+            SendToDashboard(_decoded.decoded_start);
             for (size_t i = 0; i < 9999; i++)
                 ; //STUPID SLEEP?
         }
         j++;
     }
-    return decoded;
+    return _decoded;
 }
 
 /***Send to dashboard for testing*****************/
