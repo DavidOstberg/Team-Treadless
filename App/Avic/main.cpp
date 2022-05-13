@@ -23,7 +23,8 @@ int main(int argc, char *argv[])
                           {
                               {"c", "can-interface"},
                               QCoreApplication::translate("main", "CAN interface"),
-                              QCoreApplication::translate("main", "CANBUS interface name e.g. vcan0")
+                              //QCoreApplication::translate("main", "CANBUS interface name e.g. vcan0")
+                              QCoreApplication::translate("main", "vcan1")
                           }
        });
     parser.process(app);
