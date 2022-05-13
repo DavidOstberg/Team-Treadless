@@ -40,16 +40,18 @@ void Reader(Decoded *_decoded, std::atomic<bool> *_exit_flag)
             std::cout << "Gear Stick: " << (char)_decoded->decoded_gear_stick << std::endl;
             std::cout << "Throttle: " << _decoded->decoded_throttle << std::endl;
 
+
             // emulator.GetSpeedRPMGearLevel(decoded_start, decoded_gear_stick, decoded_throttle);
 
         }
         else
         {
+            std::cout << "=========================================\n";
+            std::cout << "Sending to dashboard\n";
 
-            // std::cout << "hello"<<std::endl;
             SendToDashboard(_decoded->decoded_start);
-            for (size_t i = 0; i < 9999; i++)
-                ; //STUPID SLEEP?
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+
         }
     }
    // return *_decoded;
