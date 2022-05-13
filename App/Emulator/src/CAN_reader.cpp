@@ -1,24 +1,16 @@
 #include "reader.h"
 #include "emulator.h"
 
-void Reader(Decoded *_decoded, std::atomic<bool> *_exit_flag)
+
+void Reader(Decoded* _decoded, std::atomic<bool> *_exit_flag, scpp::SocketCan &sockat_can, scpp::SocketCan &socket_dash)
 {
     Decoding decode;
-    scpp::SocketCan sockat_can;
-    scpp::SocketCan socket_dash;
 
     scpp::CanFrame fr;
 
     //Decoded decoded;
 
     unsigned int input_handler_fr_id =1;
-
-    if (sockat_can.open("vcan0") != scpp::STATUS_OK)
-    {
-        std::cout << "Cannot open vcan0." << std::endl;
-        std::cout << "Check whether the vcan0 interface is up!" << std::endl;
-        exit(-1);
-    }
 
 
     while (!_exit_flag->load())
@@ -40,42 +32,36 @@ void Reader(Decoded *_decoded, std::atomic<bool> *_exit_flag)
             std::cout << "Gear Stick: " << (char)_decoded->decoded_gear_stick << std::endl;
             std::cout << "Throttle: " << _decoded->decoded_throttle << std::endl;
 
-
-            // emulator.GetSpeedRPMGearLevel(decoded_start, decoded_gear_stick, decoded_throttle);
-
         }
         else
         {
             std::cout << "=========================================\n";
             std::cout << "Sending to dashboard\n";
 
-            SendToDashboard(_decoded->decoded_start);
+            SendToDashboard(_decoded, socket_dash);
             std::this_thread::sleep_for(std::chrono::seconds(1));
 
         }
     }
-   // return *_decoded;
+
 }
 
 /***Send to dashboard for testing*****************/
-void SendToDashboard(int decoded_start_)
+void SendToDashboard(Decoded* _decoded, scpp::SocketCan &socket_dash)
 {
 
     scpp::CanFrame cf_to_dashboard;
-    scpp::SocketCan socket_dash;
+
     cf_to_dashboard.id = 111;
     cf_to_dashboard.len = 3;
 
-    if (socket_dash.open("vcan1") != scpp::STATUS_OK)
-            {
-                std::cout << "Cannot open vcan1." << std::endl;
-                std::cout << "Check whether the vcan1 interface is up!" << std::endl;
-                exit(-1);
-            }
+
     //std::cout << "the ignition is";
-    for (int i = 0; i < 3; i++)
-    {
-        cf_to_dashboard.data[i] = decoded_start_;
-    }
+
+
+    cf_to_dashboard.data[0] = _decoded->decoded_start;
+    cf_to_dashboard.data[1] = _decoded->decoded_gear_stick;
+    cf_to_dashboard.data[2] = _decoded->speed;
+
     socket_dash.write(cf_to_dashboard);
 }

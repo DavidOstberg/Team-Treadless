@@ -47,19 +47,15 @@ public:
 class Emulator
 {
 public:
-    int speed;
-    int rpm;
-    int gear_num;
+    // int speed {0};
+    int rpm {0};
+    int gear_num {0};
 
-    //Emulator() = default;
-    Emulator();
-
-    int CalculateSpeed(int &throttle_get);
+    int CalculateSpeed(Decoded *_data);
     int CalculateGearNum(int &speed_get);
     int CalculateRPM(int &speed_get, int &gear_num_get);
     void CalculateSpeedRPMGearLevel(Decoded*, std::atomic<bool> *);
 };
-
 
 
 #endif //EMULATOR_H

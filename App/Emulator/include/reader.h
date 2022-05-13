@@ -1,15 +1,20 @@
 #ifndef EFUNCTIONS_H
 #define EFUNCTIONS_H
 #include <atomic>
-
-
 #include "socketcan_cpp.h"
+
+//Decoded name should be data and consider to use class
 struct Decoded {
-    int decoded_start, decoded_gear_stick, decoded_throttle;
+    int decoded_start;
+    int decoded_gear_stick;
+    int decoded_throttle;
+
+    int speed;
     };
-void Reader(Decoded *, std::atomic<bool> *);
+void Reader(Decoded *, std::atomic<bool> *, scpp::SocketCan&, scpp::SocketCan&);
+
 //testing for sending to dashboard
-void SendToDashboard(int);
+void SendToDashboard(Decoded*, scpp::SocketCan&);
 
 
 #endif  //EFUNCTIONS_H
