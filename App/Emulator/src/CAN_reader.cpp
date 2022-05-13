@@ -52,7 +52,7 @@ void SendToDashboard(Decoded* _decoded, scpp::SocketCan &socket_dash)
 
     scpp::CanFrame cf_to_dashboard;
 
-    cf_to_dashboard.id = 111;
+    cf_to_dashboard.id = 0x123;
     cf_to_dashboard.len = 3;
 
 
