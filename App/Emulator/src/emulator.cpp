@@ -1,17 +1,13 @@
 #include "emulator.h"
 
-// -------------  EMULATOR Functions  -------------
-
 void Engine_Transmission(Decoded *_start_gearstick_throttle, std::atomic<bool> *_exit_flag)  {
-    Emulator emulator;
-        std::cout<<"we are in engine_transmition";
 
-    emulator.GetSpeedRPMGearLevel(_start_gearstick_throttle,_exit_flag);
+    Emulator emulator;
+    emulator.CalculateSpeedRPMGearLevel(_start_gearstick_throttle,_exit_flag);
 
 
 }
 
-/* Emulator emulator; */
 
 Emulator::Emulator(){
     this -> speed = 0;
@@ -19,14 +15,8 @@ Emulator::Emulator(){
     this -> gear_num = 0;
 }
 
-/*struct emulator
-    {
-        int speed;
 
-    };
-    emulator engine;*/
-
-void Emulator::GetSpeedRPMGearLevel(Decoded *_start_gearstick_throttle, std::atomic<bool> *_exit_flag)
+void Emulator::CalculateSpeedRPMGearLevel(Decoded *_start_gearstick_throttle, std::atomic<bool> *_exit_flag)
 {
 while (!_exit_flag->load())
 {
@@ -40,22 +30,30 @@ while (!_exit_flag->load())
 
                 break;
             case 'R':  //Reverse only gear 1 - max 60km/h
-                speed = GetSpeed(_start_gearstick_throttle->decoded_throttle);
-                rpm = GetRPM(speed, gear_num);
+                speed = CalculateSpeed(_start_gearstick_throttle->decoded_throttle);
+                rpm = CalculateRPM(speed, gear_num);
                 break;
             case 'N':  // Neutral
                 speed = 0;
                 rpm = idle;
                 break;
             case 'D':   // Drives
-                speed = GetSpeed(_start_gearstick_throttle->decoded_throttle);
-                gear_num = GetGearNum(speed);
-                rpm = GetRPM(speed, gear_num);
-                std::cout << "Speed = " << speed << std::endl;
+                speed = CalculateSpeed(_start_gearstick_throttle->decoded_throttle);
+                gear_num = CalculateGearNum(speed);
+                rpm = CalculateRPM(speed, gear_num);
+
+                std::cout << std::endl;
+                std::cout << "Gear stick = " << (char)_start_gearstick_throttle->decoded_gear_stick << std::endl;
                 std::cout << "Gear No = " << gear_num << std::endl;
+                std::cout << "Throttle = "<<_start_gearstick_throttle->decoded_throttle <<std::endl;
+                std::cout << std::endl;
+                std::cout << "Speed = " << speed << std::endl;
                 std::cout << "RPM = " << rpm << std::endl;
-                std::cout << "throtthle is"<<_start_gearstick_throttle->decoded_throttle <<std::endl;
+                std::cout << std::endl;
+
+
                 std::this_thread::sleep_for(std::chrono::seconds(1));
+
                 break;
 
 
@@ -68,7 +66,7 @@ while (!_exit_flag->load())
 }
 }
 
-int Emulator::GetSpeed(int &throttle_get)
+int Emulator::CalculateSpeed(int &throttle_get)
 {
     if(throttle_get < max_throttle){
         speed = throttle_get*throttle_ratio;
@@ -76,7 +74,7 @@ int Emulator::GetSpeed(int &throttle_get)
     return speed;
 }
 
-int Emulator::GetGearNum(int &speed_get)
+int Emulator::CalculateGearNum(int &speed_get)
 {
     if(speed_get >= 0 && speed_get <= 60){
         gear_num = 1;
@@ -102,7 +100,7 @@ int Emulator::GetGearNum(int &speed_get)
     return gear_num;
 }
 
-int Emulator::GetRPM(int &speed_get, int &gear_num_get)
+int Emulator::CalculateRPM(int &speed_get, int &gear_num_get)
 {
     int gear_num_ratio;
     if(gear_num_get == 1 && speed_get<=60)

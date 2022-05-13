@@ -54,10 +54,10 @@ public:
     //Emulator() = default;
     Emulator();
 
-    int GetSpeed(int &throttle_get);
-    int GetGearNum(int &speed_get);
-    int GetRPM(int &speed_get, int &gear_num_get);
-    void GetSpeedRPMGearLevel(Decoded*, std::atomic<bool> *);
+    int CalculateSpeed(int &throttle_get);
+    int CalculateGearNum(int &speed_get);
+    int CalculateRPM(int &speed_get, int &gear_num_get);
+    void CalculateSpeedRPMGearLevel(Decoded*, std::atomic<bool> *);
 };
 
 
