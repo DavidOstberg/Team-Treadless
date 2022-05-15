@@ -4,17 +4,19 @@
 #include "socketcan_cpp.h"
 
 //Decoded name should be data and consider to use class
-struct Decoded {
+struct Decoded_data {
     int decoded_start;
     int decoded_gear_stick;
     int decoded_throttle;
 
     int speed;
+    int gear_num;
+    int rpm;
     };
-void Reader(Decoded *, std::atomic<bool> *, scpp::SocketCan&, scpp::SocketCan&);
+void Reader(Decoded_data *, std::atomic<bool> *, scpp::SocketCan&, scpp::SocketCan&);
 
 //testing for sending to dashboard
-void SendToDashboard(Decoded*, scpp::SocketCan&);
+void SendToDashboard(Decoded_data*, scpp::SocketCan&);
 
 
 #endif  //EFUNCTIONS_H

@@ -5,7 +5,7 @@
 #include "canio/can_common.h"
 
 void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
-    std::cout<< "data from emulator out of switch "<< (char)_frame->data[0]<< std::endl;
+
     std::cout<< "CAN ID  "<< _frame->can_id<< std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
@@ -45,7 +45,7 @@ void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
         break;
     case CAN::MSG::ENGINE_ID: {
         const struct CAN::MSG::_engine *d = reinterpret_cast<const struct CAN::MSG::_engine * >((_frame->data));
-        std::cout<< "start status from emulator "<< (char)_frame->data[0]<< std::endl;
+        std::cout<< "start status from emulator "<< (int)_frame->data[0]<< std::endl;
         std::cout<< "gear stick from emulator "<< (char)_frame->data[1]<< std::endl;
 
         std::cout<< "speeds from emulator "<< (int)_frame->data[2]<< std::endl;
@@ -53,8 +53,9 @@ void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
         this->InstrumentCluster.ignite(d->RUN);
         this->InstrumentCluster.setRPM(d->RPM);
         this->InstrumentCluster.setSpeed(d->SPD);
-        this->InstrumentCluster.setGear((char)_frame->data[1]);
+        this->InstrumentCluster.setGear(_frame->data[1]);
         this->InstrumentCluster.setGearPindle_int(_frame->data[1]);
+        this->InstrumentCluster.setIcon(&p);
 
 
     }

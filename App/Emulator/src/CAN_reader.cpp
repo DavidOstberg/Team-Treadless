@@ -2,20 +2,16 @@
 #include "emulator.h"
 
 
-void Reader(Decoded* _decoded, std::atomic<bool> *_exit_flag, scpp::SocketCan &sockat_can, scpp::SocketCan &socket_dash)
+void Reader(Decoded_data* _decoded, std::atomic<bool> *_exit_flag, scpp::SocketCan &sockat_can, scpp::SocketCan &socket_dash)
 {
     Decoding decode;
-
     scpp::CanFrame fr;
-
-    //Decoded decoded;
 
     unsigned int input_handler_fr_id =1;
 
 
     while (!_exit_flag->load())
     {
-        //scpp::CanFrame fr;   ?????????
         if (sockat_can.read(fr) == scpp::STATUS_OK)
         {
             std::cout << std::endl;
@@ -47,16 +43,13 @@ void Reader(Decoded* _decoded, std::atomic<bool> *_exit_flag, scpp::SocketCan &s
 }
 
 /***Send to dashboard for testing*****************/
-void SendToDashboard(Decoded* _decoded, scpp::SocketCan &socket_dash)
+void SendToDashboard(Decoded_data* _decoded, scpp::SocketCan &socket_dash)
 {
 
     scpp::CanFrame cf_to_dashboard;
 
     cf_to_dashboard.id = 0x123;
     cf_to_dashboard.len = 3;
-
-
-    //std::cout << "the ignition is";
 
 
     cf_to_dashboard.data[0] = _decoded->decoded_start;
