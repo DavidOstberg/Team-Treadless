@@ -5,14 +5,13 @@
 #include "canio/can_common.h"
 
 void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
-    std::cout<< "data from emulator out of switch "<< (char)_frame->data[0]<< std::endl;
+
     std::cout<< "CAN ID  "<< _frame->can_id<< std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 
     switch (_frame->can_id) {
-    std::cout<< "data in the switch "<< _frame->can_id<< std::endl;
-    case CAN::MSG::GAUGES_ID: {
+/*     case CAN::MSG::GAUGES_ID: {
         const struct CAN::MSG::Gauges_t::_inner* s =
         reinterpret_cast<const struct CAN::MSG::Gauges_t::_inner* >((_frame->data));
         this->InstrumentCluster.setFuelGauges(s->G_FUEL);
@@ -30,31 +29,38 @@ void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
         } else
             p.hazard = 0;
         this->InstrumentCluster.setIcon(&p);
-        break;
+        break; */
 //    case CAN::MSG::USERIN_ID: {
 //       // const struct CAN::MSG::_userin *d = reinterpret_cast<const struct CAN::MSG::_userin * >((_frame->data));
 //       // this->InstrumentCluster.ignite(d->IGNT);
 //    }
 //        break;
 
-    case CAN::MSG::GEARBX_ID: {
+   /*  case CAN::MSG::GEARBX_ID: {
         const struct CAN::MSG::Gearbx_t::_bits *d = reinterpret_cast<const struct CAN::MSG::Gearbx_t::_bits * >((_frame->data));
         this->InstrumentCluster.setGearPindle_int(d->GEAR_P);
         this->InstrumentCluster.setGear(d->GEAR_N);
-    }
-        break;
+    } */
+
+       // break;
     case CAN::MSG::ENGINE_ID: {
         const struct CAN::MSG::_engine *d = reinterpret_cast<const struct CAN::MSG::_engine * >((_frame->data));
-        std::cout<< "start status from emulator "<< (char)_frame->data[0]<< std::endl;
+        std::cout<< "start status from emulator "<< (int)_frame->data[0]<< std::endl;
         std::cout<< "gear stick from emulator "<< (char)_frame->data[1]<< std::endl;
 
         std::cout<< "speeds from emulator "<< (int)_frame->data[2]<< std::endl;
 
-        this->InstrumentCluster.ignite(d->RUN);
-        this->InstrumentCluster.setRPM(d->RPM);
-        this->InstrumentCluster.setSpeed(d->SPD);
-        this->InstrumentCluster.setGear((char)_frame->data[1]);
-        this->InstrumentCluster.setGearPindle_int(_frame->data[1]);
+        this->InstrumentCluster.ignite((int)_frame->data[0]);
+        this->InstrumentCluster.setRPM((int)(_frame->data[3]*100));
+        this->InstrumentCluster.setSpeed((int)_frame->data[2]);
+
+
+
+        this->InstrumentCluster.setGear(_frame->data[4]);
+        this->InstrumentCluster.setGearPindle_int((int)_frame->data[1]);
+        //this->InstrumentCluster.setGearPindle_char(68);
+        this->InstrumentCluster.setTXT("Treadless");
+        // this->InstrumentCluster.setIcon(&p);
 
 
     }
@@ -80,7 +86,7 @@ bool yourStuff::run() {
     CANOpener::ReadStatus status = CANOpener::ReadStatus::OK;
     canfd_frame frame;
     this->CANReader.read(&frame);
-    /*while*/if (status == CANOpener::ReadStatus::OK) {
+    /*while*/if ((status == CANOpener::ReadStatus::OK)&&(frame.can_id==0x123)) {
         this->YouHaveJustRecievedACANFrame(&frame);
     }
     if (status == CANOpener::ReadStatus::ERROR) ret = false;

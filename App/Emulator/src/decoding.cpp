@@ -23,20 +23,20 @@ bool Decoding::DecodeStart(const uint8_t &ignition_request)   {
     return ignition;
     }
 
-char Decoding::DecodeGearStick(const uint8_t &gear_stick_request)   {
+int Decoding::DecodeGearStick(const uint8_t &gear_stick_request)   {
         switch (gear_stick_request)
         {
         case park:   //user press 'p' for park
-            gear_stick = 'P';
+            gear_stick = 0;
             break;
         case reverse:   //user press 'r' for reverse
-            gear_stick = 'R';
+            gear_stick = 2;
             break;
         case neutral:     //user press 'n' for neutral
-            gear_stick = 'N';
+            gear_stick = 1;
             break;
         case drive:   //user press 'd' for drive
-            gear_stick = 'D';
+            gear_stick = 3;
             break;
 
         default:

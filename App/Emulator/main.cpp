@@ -3,7 +3,7 @@
 #include <thread>
 
 
-void Engine_Transmission(Decoded *_start_gearstick_throttle, std::atomic<bool> *exit_flag);
+void Engine_Transmission(Decoded_data *_start_gearstick_throttle, std::atomic<bool> *exit_flag);
 
 int main() {
 
@@ -24,7 +24,7 @@ int main() {
                 exit(-1);
             }
 
-    Decoded decoded;
+    Decoded_data decoded;
 
     std::atomic<bool> exit_flag(false);
 

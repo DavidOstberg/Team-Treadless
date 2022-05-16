@@ -39,7 +39,7 @@ public:
 
     bool DecodeStart(const uint8_t &ignition_request);
 
-    char DecodeGearStick(const uint8_t &gear_stick_request);
+    int DecodeGearStick(const uint8_t &gear_stick_request);
 
     int DecodeThrottle(const uint8_t &throttle_request);
 };
@@ -47,15 +47,14 @@ public:
 class Emulator
 {
 public:
-    // int speed {0};
-    int rpm {0};
-    int gear_num {0};
 
-    int CalculateSpeed(Decoded *_data);
-    int CalculateGearNum(int &speed_get);
-    int CalculateRPM(int &speed_get, int &gear_num_get);
-    void CalculateSpeedRPMGearLevel(Decoded*, std::atomic<bool> *);
+    void CalculateSpeed(Decoded_data *_data);
+    void CalculateGearNum(Decoded_data*);
+    void CalculateRPM(Decoded_data*);
+    void CalculateSpeedRPMGearLevel(Decoded_data*, std::atomic<bool> *);
 };
 
+
+void printing(Decoded_data *_data);
 
 #endif //EMULATOR_H
