@@ -6,6 +6,7 @@ project(main VERSION 1.0)
 
 add_subdirectory(InputHandler)
 add_subdirectory(Emulator)
+add_subdirectory(Avic)
 
 add_compile_options(-Wall -Wextra -Wpedantic)
 
