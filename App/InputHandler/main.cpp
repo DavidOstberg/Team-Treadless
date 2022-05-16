@@ -16,6 +16,14 @@ int main() {
         exit (-1);
     }
 
+    /* initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    nodelay(stdscr, TRUE); */
+
+
+
     while (true) {
         scpp::CanFrame cf_to_write;
 
