@@ -16,22 +16,22 @@ while (!_exit_flag->load())
 
     if(_data->decoded_start){
         switch( _data->decoded_gear_stick){
-            case 'P': //Park
+            case 0: //Park
                 _data->speed = 0;
                 _data->rpm = idle;
                 break;
 
-            case 'R':  //Reverse only gear 1 - max 60km/h
+            case 2:  //Reverse only gear 1 - max 60km/h
                 CalculateSpeed(_data);
                 CalculateRPM(_data);
                 break;
 
-            case 'N':  // Neutral
+            case 1:  // Neutral
                 _data->speed = 0;
                 _data->rpm = idle;
 
                 break;
-            case 'D':   // Drives
+            case 3:   // Drives
                 CalculateSpeed(_data);
                 CalculateGearNum(_data);
                 CalculateRPM(_data);

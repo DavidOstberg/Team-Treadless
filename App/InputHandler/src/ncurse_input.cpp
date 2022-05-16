@@ -28,6 +28,9 @@ void ncurseInput(uint8_t array[])
             std::cout << "not valid input \n";
         }
     }
+    else{
+        array[2] = 0;
+    }
 }
 
 /*void ncurseInput(uint8_t array[]) {

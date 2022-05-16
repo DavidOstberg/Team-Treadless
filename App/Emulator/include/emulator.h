@@ -39,7 +39,7 @@ public:
 
     bool DecodeStart(const uint8_t &ignition_request);
 
-    char DecodeGearStick(const uint8_t &gear_stick_request);
+    int DecodeGearStick(const uint8_t &gear_stick_request);
 
     int DecodeThrottle(const uint8_t &throttle_request);
 };

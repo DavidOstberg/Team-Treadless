@@ -13,6 +13,7 @@ struct Decoded_data {
     int gear_num;
     int rpm;
     };
+
 void Reader(Decoded_data *, std::atomic<bool> *, scpp::SocketCan&, scpp::SocketCan&);
 
 //testing for sending to dashboard

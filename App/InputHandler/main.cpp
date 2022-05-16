@@ -30,7 +30,7 @@ int main() {
         if (write_sc_status != scpp::STATUS_OK)
             printf("something went wrong on socket write, error code : %d \n", int32_t(write_sc_status));
         else
-            printf("Message was written to the socket \n");
+            printf(" Message was written to the socket \r\n");
     }
 
     return 0;
