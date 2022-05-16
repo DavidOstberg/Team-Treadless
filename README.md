@@ -4,6 +4,32 @@ Team members: Beatriz de Castro Diez, Can Yang, David Östberg, Leo Zuckerman
 (Goal Sprint 1: Input Handler.)
 
 (Goal Sprint 2: CAN reader and Input Handler.)
+
+(Goal Sprint 3: Have the whole chain of communication from input handler to dashboard and have some functionalities on the UI.)
+
+(Goal Sprint 4: Finalizing the features of the engine emulator. Prepare the final demo.)
+
+# User manual
+
+This repo includes three executables/binaries. And they are executed by one CMake.
+
+Create a build folder: mkdir build
+
+Go into build folder: cd build
+
+Generate build files for the environment: cmake ..
+
+Build executables and libraries: make
+
+Run input handler(/Team-Treadless/build/App/InputHandler): ./inputHandler
+
+Run emulator(/Team-Treadless/build/App/Emulator): ./emulator
+
+Run avic(/Team-Treadless/build/App/Emulator): ./avic -c vcan1
+
+
+s to start the engin, o to turn on the engin, g/d/p/r for gear leverl, 8 for acceleration and 2 for deceleration.
+
 ## Working area
 | Applications  | Team member         |
 | ------------- |:-------------:|
@@ -13,12 +39,15 @@ Team members: Beatriz de Castro Diez, Can Yang, David Östberg, Leo Zuckerman
 
 ## Project description
 One executable receiving  user input transmitting CAN messages.
-one executable with at least two thread:
+One executable with at least two thread:
 - One reading  CAN data
 - Emulation
 
+One executable for the dashboard user interface.
 
-keyboard input -> Input handler --vcan--> CAN reader | Emulator --vcan--> Dashboard
+keyboard input -> Input handler --vcan0--> CAN reader | Emulator --vcan1--> Dashboard
+
+Two communiation chanel are used: vcan0 and vcan1.
 
 ## Input Hander
 Keyboard mapping:
@@ -35,9 +64,9 @@ N- Gear in Neutral
 
 D- Gear in Drive
 
-8(with numlock) - Acceleration
+8 (with numlock) - Acceleration
 
-2(with numlock) - Deceleration
+2 (with numlock) - Deceleration
 
 
 Input handler is sending the CAN frame with ignition status, Gear state and padle status to the CAN reader.
@@ -57,12 +86,6 @@ Ignition: 0
 Gear: 0
 
 Throttle: 0
-
-
-## Where are we
-
-
-keyboard input -> Input handler --vcan--> CAN reader ->logging
 
 
 ## User cases
