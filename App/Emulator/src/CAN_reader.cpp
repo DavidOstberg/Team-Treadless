@@ -16,20 +16,25 @@ void Reader(Decoded_data *_decoded, std::atomic<bool> *_exit_flag, scpp::SocketC
             printf("len %d byte, id: %d, data: %02x %02x %02x %02x %02x %02x %02x %02x  \n", fr.len, fr.id,
                    fr.data[0], fr.data[1], fr.data[2], fr.data[3],
                    fr.data[4], fr.data[5], fr.data[6], fr.data[7]);
+        
+        //SharedBuffer THIS_IS_SHARED_AMONGST_BOTH_THREADS;
+
+        //Decoded_data decoded;
 
         { //open lock scope
-            std::lock_guard<std::mutex> lock(_decoded->m);
-            _decoded->decoded_start = decode.DecodeStart(fr.data[0]);
-            _decoded->decoded_gear_stick = decode.DecodeGearStick(fr.data[1]);
-            _decoded->decoded_throttle = decode.DecodeThrottle(fr.data[2]);
+           std::lock_guard<std::mutex> lock(_decoded->m);
+           _decoded->decoded_start = decode.DecodeStart(fr.data[0]);
+           _decoded->decoded_gear_stick = decode.DecodeGearStick(fr.data[1]);
+           _decoded->decoded_throttle = decode.DecodeThrottle(fr.data[2]);
         } //close lock scope
+
+       //THIS_IS_SHARED_AMONGST_BOTH_THREADS.write(decoded);
         
             std::cout << "Ignition: " << _decoded->decoded_start << std::endl;
             std::cout << "Gear Stick: " << /* (char) */_decoded->decoded_gear_stick << std::endl;
             std::cout << "Throttle: " << _decoded->decoded_throttle << std::endl;
         }
-        // else
-        //{
+
         std::cout << "=========================================\n";
         std::cout << "Sending to dashboard\n";
 

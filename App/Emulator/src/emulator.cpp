@@ -11,48 +11,73 @@ void Engine_Transmission(Decoded_data *_data, std::atomic<bool> *_exit_flag)  {
 
 void Emulator::CalculateSpeedRPMGearLevel(Decoded_data *_data, std::atomic<bool> *_exit_flag)
 {
-while (!_exit_flag->load())
-{
+
+
+while (!_exit_flag->load()){
 
     if(_data->decoded_start){
         switch( _data->decoded_gear_stick){
-            case 0: //Park
-                _data->speed = 0;
-                _data->rpm = idle;
-                break;
+         
+                case 0: //Park
+                    _data->speed = 0;
+                    _data->rpm = idle;
+                    _data->gear_num = 0;
 
-            case 2:  //Reverse only gear 1 - max 60km/h
-                CalculateSpeed(_data);
-                CalculateRPM(_data);
-                break;
+                    printing(_data);
 
-            case 1:  // Neutral
-                _data->speed = 0;
-                _data->rpm = idle;
+                    break;
 
-                break;
-            case 3:   // Drives
-                CalculateSpeed(_data);
-                CalculateGearNum(_data);
-                CalculateRPM(_data);
+                case 1:  // Neutral
 
-                printing(_data);
+                    _data->speed = 0;
+                    _data->gear_num = 0;
+                    CalculateRPMInNeutral(_data);
+                    
+                    printing(_data);
 
-                break;
+                    break;
+                    
+                case 2:  //Reverse only gear 1 - max 40km/h
 
-            default:
-                break;
+                    _data->gear_num = 1;
+                    CalculateSpeed(_data, max_speed_reverse);  
+                    CalculateRPM(_data);
 
+                    printing(_data);
+
+                    break;
+
+                case 3:   // Drive
+
+                    CalculateSpeed(_data, max_speed_drive);
+                    CalculateGearNum(_data);
+                    CalculateRPM(_data);
+
+                    printing(_data);
+
+                    break;
+
+                default:
+                    break;
         }
     }
-}
+    
+    else {  // ignition OFF
+        _data->decoded_gear_stick = 1;
+        _data->decoded_throttle = 0;
+        _data->gear_num = 0;
+        _data->rpm = 0;
+        _data->speed = 0;
+    } 
+
+    }
 }
 
-void Emulator::CalculateSpeed(Decoded_data *_data)
+void Emulator::CalculateSpeed(Decoded_data *_data, const double _max_speed)
 {
-    if(_data->decoded_throttle < max_throttle){
-        _data->speed = _data->decoded_throttle *throttle_ratio;
-    }
+    double throttle_ratio = _max_speed / max_throttle;
+    _data->speed = _data->decoded_throttle *throttle_ratio;
+
 }
 
 void Emulator::CalculateGearNum(Decoded_data* _data)
@@ -106,6 +131,10 @@ void Emulator::CalculateRPM(Decoded_data *_data)
     _data->rpm = (_data->speed*gear_num_ratio)+idle;
 
 }
+
+ void Emulator::CalculateRPMInNeutral(Decoded_data*_data){
+        _data->rpm = (_data->decoded_throttle * 50)+idle;
+ }
 
 void printing(Decoded_data *_data){
 
