@@ -17,7 +17,7 @@ int main() {
     }
 
     initscr();
-   
+
   /*   cbreak();
     noecho();
     keypad(stdscr, TRUE);
@@ -37,7 +37,7 @@ int main() {
 
         auto write_sc_status = sockat_can.write(cf_to_write);
         if (write_sc_status != scpp::STATUS_OK)
-            printf("something went wrong on socket write, error code : %d \n", int32_t(write_sc_status));
+            printf("something went wrong on socket write, error code : %d \r\n", int32_t(write_sc_status));
         else
             printf(" Message was written to the socket \r\n");
     }

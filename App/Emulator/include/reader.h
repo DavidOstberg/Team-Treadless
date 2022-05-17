@@ -13,13 +13,24 @@ struct Decoded_data {
     int speed;
     int gear_num;
     int rpm;
-    std::mutex m;  
+    std::mutex m;
     };
 
 void Reader(Decoded_data *, std::atomic<bool> *, scpp::SocketCan&, scpp::SocketCan&);
 
 //testing for sending to dashboard
 void SendToDashboard(Decoded_data*, scpp::SocketCan&);
+
+// Not cool packing!
+class Packing_RPM
+{
+
+public:
+
+    int FirstDigitRPM(int rpm);
+    int SecondDigitRPM(int rpm);
+
+};
 
 
 #endif  //EFUNCTIONS_H
