@@ -51,16 +51,20 @@ void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
         std::cout<< "speeds from emulator "<< (int)_frame->data[2]<< std::endl;
 
         this->InstrumentCluster.ignite((int)_frame->data[0]);
-        this->InstrumentCluster.setRPM((int)(_frame->data[3]*100));
+        //this->InstrumentCluster.setRPM((int)(_frame->data[3]*100));
         this->InstrumentCluster.setSpeed((int)_frame->data[2]);
 
+        this->InstrumentCluster.setRPM((int)(_frame->data[4]*100+_frame->data[5]));
+        std::cout << "RPM" << (_frame->data[4]*100+_frame->data[5]) << std::endl;
 
 
-        this->InstrumentCluster.setGear(_frame->data[4]);
+
+        this->InstrumentCluster.setGear(_frame->data[3]);
         this->InstrumentCluster.setGearPindle_int((int)_frame->data[1]);
         //this->InstrumentCluster.setGearPindle_char(68);
         this->InstrumentCluster.setTXT("Treadless");
         // this->InstrumentCluster.setIcon(&p);
+        this->InstrumentCluster.setOilTemperatureGauges(_frame->data[6]);
 
 
     }

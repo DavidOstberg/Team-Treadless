@@ -5,7 +5,6 @@ void Engine_Transmission(Decoded_data *_data, std::atomic<bool> *_exit_flag)  {
     Emulator emulator;
     emulator.CalculateSpeedRPMGearLevel(_data,_exit_flag);
 
-
 }
 
 
@@ -16,6 +15,7 @@ void Emulator::CalculateSpeedRPMGearLevel(Decoded_data *_data, std::atomic<bool>
 while (!_exit_flag->load()){
 
     if(_data->decoded_start){
+
         switch( _data->decoded_gear_stick){
          
                 case 0: //Park
@@ -71,6 +71,18 @@ while (!_exit_flag->load()){
     } 
 
     }
+}
+
+void Emulator::CalculateTempeture(Decoded_data *_data)
+{
+  
+    while (_data->temperature < max_temperature)
+    {
+    _data->temperature +=   delta_temperature;
+     std::this_thread::sleep_for(std::chrono::seconds(3));
+      std::cout << "TEMPERATURE = " << _data->temperature << std::endl;
+
+    }    
 }
 
 void Emulator::CalculateSpeed(Decoded_data *_data, const double _max_speed)
@@ -132,9 +144,21 @@ void Emulator::CalculateRPM(Decoded_data *_data)
 
 }
 
+
  void Emulator::CalculateRPMInNeutral(Decoded_data*_data){
         _data->rpm = (_data->decoded_throttle * 50)+idle;
  }
+
+int Packing_RPM::FirstDigitRPM(int rpm)
+    {
+        return rpm / 100;
+
+    };
+
+int Packing_RPM::SecondDigitRPM(int rpm){
+        return rpm % 100;
+    };
+
 
 void printing(Decoded_data *_data){
 
@@ -145,6 +169,8 @@ void printing(Decoded_data *_data){
     std::cout << std::endl;
     std::cout << "Speed = " << _data->speed << std::endl;
     std::cout << "RPM = " << _data->rpm << std::endl;
+    std::cout << std::endl;
+    std::cout << "TEMPERATURE = " << _data->temperature << std::endl;
     std::cout << std::endl;
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
