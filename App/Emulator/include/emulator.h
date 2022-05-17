@@ -18,6 +18,10 @@ const static int reverse = 114;
 const static int on = 115;
 const static int decelerate = 50; //258
 const static int accelerate = 56; //259
+const static int min_temperature = 0;
+const static int delta_temperature = 5;
+const static int max_temperature = 100;
+
 
 const static int idle = 800;
 const static int max_speed = 250;
@@ -52,6 +56,7 @@ public:
     void CalculateGearNum(Decoded_data*);
     void CalculateRPM(Decoded_data*);
     void CalculateSpeedRPMGearLevel(Decoded_data*, std::atomic<bool> *);
+    void CalculateTempeture(Decoded_data *_data);
 };
 
 

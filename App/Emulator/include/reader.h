@@ -13,7 +13,9 @@ struct Decoded_data {
     int speed;
     int gear_num;
     int rpm;
-    std::mutex m;
+
+    int temperature;
+    std::mutex m;  
     };
 
 void Reader(Decoded_data *, std::atomic<bool> *, scpp::SocketCan&, scpp::SocketCan&);
