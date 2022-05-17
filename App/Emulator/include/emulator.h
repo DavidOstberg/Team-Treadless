@@ -20,7 +20,7 @@ const static int decelerate = 50; //258
 const static int accelerate = 56; //259
 
 const static int idle = 800;
-const static int max_speed = 300;
+const static int max_speed = 250;
 //const static uint8_t max_throttle = 90;    //throttle[max]
 const static int throttle_ratio = max_speed / max_throttle; // added in new main
 

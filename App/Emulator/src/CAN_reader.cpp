@@ -17,10 +17,13 @@ void Reader(Decoded_data *_decoded, std::atomic<bool> *_exit_flag, scpp::SocketC
                    fr.data[0], fr.data[1], fr.data[2], fr.data[3],
                    fr.data[4], fr.data[5], fr.data[6], fr.data[7]);
 
+        { //open lock scope
+            std::lock_guard<std::mutex> lock(_decoded->m);
             _decoded->decoded_start = decode.DecodeStart(fr.data[0]);
             _decoded->decoded_gear_stick = decode.DecodeGearStick(fr.data[1]);
             _decoded->decoded_throttle = decode.DecodeThrottle(fr.data[2]);
-
+        } //close lock scope
+        
             std::cout << "Ignition: " << _decoded->decoded_start << std::endl;
             std::cout << "Gear Stick: " << /* (char) */_decoded->decoded_gear_stick << std::endl;
             std::cout << "Throttle: " << _decoded->decoded_throttle << std::endl;

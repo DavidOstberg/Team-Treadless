@@ -16,12 +16,13 @@ int main() {
         exit (-1);
     }
 
-    /* initscr();
-    cbreak();
+    initscr();
+   
+  /*   cbreak();
     noecho();
     keypad(stdscr, TRUE);
-    nodelay(stdscr, TRUE); */
-
+    nodelay(stdscr, TRUE);
+ */
 
 
     while (true) {
