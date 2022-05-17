@@ -1,6 +1,7 @@
 #ifndef EFUNCTIONS_H
 #define EFUNCTIONS_H
 #include <atomic>
+#include <mutex>
 #include "socketcan_cpp.h"
 
 //Decoded name should be data and consider to use class
@@ -12,6 +13,7 @@ struct Decoded_data {
     int speed;
     int gear_num;
     int rpm;
+    std::mutex m;  
     };
 
 void Reader(Decoded_data *, std::atomic<bool> *, scpp::SocketCan&, scpp::SocketCan&);

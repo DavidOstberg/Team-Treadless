@@ -7,7 +7,7 @@ void ncurseInput(uint8_t array[])
 {
 
     int ch;
-    initscr();
+    //initscr();
 
     if (((ch) = getch()) != ERR)
     {
