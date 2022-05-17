@@ -23,7 +23,7 @@ void Reader(Decoded_data *_decoded, std::atomic<bool> *_exit_flag, scpp::SocketC
             _decoded->decoded_gear_stick = decode.DecodeGearStick(fr.data[1]);
             _decoded->decoded_throttle = decode.DecodeThrottle(fr.data[2]);
         } //close lock scope
-        
+
             std::cout << "Ignition: " << _decoded->decoded_start << std::endl;
             std::cout << "Gear Stick: " << /* (char) */_decoded->decoded_gear_stick << std::endl;
             std::cout << "Throttle: " << _decoded->decoded_throttle << std::endl;
@@ -45,17 +45,24 @@ void SendToDashboard(Decoded_data *_decoded, scpp::SocketCan &socket_dash)
 {
 
     scpp::CanFrame cf_to_dashboard;
+    Packing_RPM packed_rpm;
 
     cf_to_dashboard.id = 0x123;
+
     cf_to_dashboard.len = 8;
+
 
     cf_to_dashboard.data[0] = _decoded->decoded_start;
     cf_to_dashboard.data[1] = _decoded->decoded_gear_stick;
     cf_to_dashboard.data[2] = _decoded->speed;
-    cf_to_dashboard.data[3] = _decoded->rpm/100;
-    cf_to_dashboard.data[4] = _decoded->gear_num;
+
+    cf_to_dashboard.data[3] = _decoded->gear_num;
+
     cf_to_dashboard.data[6] = _decoded->temperature;
 
+
+    cf_to_dashboard.data[4] = packed_rpm.FirstDigitRPM(_decoded->rpm);
+    cf_to_dashboard.data[5] = packed_rpm.SecondDigitRPM(_decoded->rpm);
 
 
     socket_dash.write(cf_to_dashboard);

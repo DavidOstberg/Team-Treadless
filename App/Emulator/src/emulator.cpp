@@ -36,7 +36,6 @@ while (!_exit_flag->load())
                 CalculateSpeed(_data);
                 CalculateGearNum(_data);
                 CalculateRPM(_data);
-                
                 printing(_data);
 
                 break;
@@ -117,6 +116,16 @@ void Emulator::CalculateRPM(Decoded_data *_data)
     _data->rpm = (_data->speed*gear_num_ratio)+idle;
 
 }
+
+int Packing_RPM::FirstDigitRPM(int rpm)
+    {
+        return rpm / 100;
+
+    };
+
+int Packing_RPM::SecondDigitRPM(int rpm){
+        return rpm % 100;
+    };
 
 void printing(Decoded_data *_data){
 
