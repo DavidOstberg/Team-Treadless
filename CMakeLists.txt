@@ -10,6 +10,7 @@ add_subdirectory(App)
 file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/App/InputHandler/CMakeLists.txt" LOC_PATH)
 file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/lib/socketCAN/CMakeLists.txt" LOC_PATH)
 file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/App/Emulator/CMakeLists.txt" LOC_PATH)
+file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/App/Avic/CMakeLists.txt" LOC_PATH)
 
 
 add_compile_options(-Wall -Wextra -Wpedantic)
