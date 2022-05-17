@@ -15,6 +15,7 @@ while (!_exit_flag->load())
 {
 
     if(_data->decoded_start){
+       // CalculateTempeture(_data);
         switch( _data->decoded_gear_stick){
             case 0: //Park
                 _data->speed = 0;
@@ -35,7 +36,7 @@ while (!_exit_flag->load())
                 CalculateSpeed(_data);
                 CalculateGearNum(_data);
                 CalculateRPM(_data);
-
+                
                 printing(_data);
 
                 break;
@@ -47,7 +48,17 @@ while (!_exit_flag->load())
     }
 }
 }
+void Emulator::CalculateTempeture(Decoded_data *_data)
+{
+  
+    while (_data->temperature < max_temperature)
+    {
+    _data->temperature +=   delta_temperature;
+     std::this_thread::sleep_for(std::chrono::seconds(3));
+      std::cout << "TEMPERATURE = " << _data->temperature << std::endl;
 
+    }    
+}
 void Emulator::CalculateSpeed(Decoded_data *_data)
 {
     if(_data->decoded_throttle < max_throttle){
@@ -116,6 +127,8 @@ void printing(Decoded_data *_data){
     std::cout << std::endl;
     std::cout << "Speed = " << _data->speed << std::endl;
     std::cout << "RPM = " << _data->rpm << std::endl;
+    std::cout << std::endl;
+    std::cout << "TEMPERATURE = " << _data->temperature << std::endl;
     std::cout << std::endl;
 
     std::this_thread::sleep_for(std::chrono::seconds(1));

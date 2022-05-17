@@ -13,6 +13,7 @@ struct Decoded_data {
     int speed;
     int gear_num;
     int rpm;
+    int temperature;
     std::mutex m;  
     };
 

@@ -61,6 +61,7 @@ void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
         //this->InstrumentCluster.setGearPindle_char(68);
         this->InstrumentCluster.setTXT("Treadless");
         // this->InstrumentCluster.setIcon(&p);
+        this->InstrumentCluster.setOilTemperatureGauges(_frame->data[6]);
 
 
     }
