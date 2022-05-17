@@ -21,16 +21,11 @@ const static int accelerate = 56; //259
 const static int min_temperature = 0;
 const static int delta_temperature = 5;
 const static int max_temperature = 100;
-
-
 const static int idle = 800;
-const static int max_speed = 250;
-//const static uint8_t max_throttle = 90;    //throttle[max]
-const static int throttle_ratio = max_speed / max_throttle; // added in new main
+const static int max_speed_drive = 250;
+const static int max_speed_reverse = 40;
 
 const static float kmh_mph = 0.62;
-
-
 
 class Decoding
 {
@@ -52,11 +47,14 @@ class Emulator
 {
 public:
 
-    void CalculateSpeed(Decoded_data *_data);
+    void CalculateSpeed(Decoded_data *, const double);
     void CalculateGearNum(Decoded_data*);
     void CalculateRPM(Decoded_data*);
     void CalculateSpeedRPMGearLevel(Decoded_data*, std::atomic<bool> *);
+
+    void CalculateRPMInNeutral(Decoded_data*);
     void CalculateTempeture(Decoded_data *_data);
+
 };
 
 
