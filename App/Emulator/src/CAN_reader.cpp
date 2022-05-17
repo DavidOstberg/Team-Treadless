@@ -47,13 +47,14 @@ void SendToDashboard(Decoded_data *_decoded, scpp::SocketCan &socket_dash)
     scpp::CanFrame cf_to_dashboard;
 
     cf_to_dashboard.id = 0x123;
-    cf_to_dashboard.len = 5;
+    cf_to_dashboard.len = 8;
 
     cf_to_dashboard.data[0] = _decoded->decoded_start;
     cf_to_dashboard.data[1] = _decoded->decoded_gear_stick;
     cf_to_dashboard.data[2] = _decoded->speed;
     cf_to_dashboard.data[3] = _decoded->rpm/100;
     cf_to_dashboard.data[4] = _decoded->gear_num;
+    cf_to_dashboard.data[6] = _decoded->temperature;
 
 
 

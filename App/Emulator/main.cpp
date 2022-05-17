@@ -1,7 +1,7 @@
 #include <iostream>
-#include "reader.h"
-#include <thread>
 
+#include <thread>
+#include<emulator.h>
 
 void Engine_Transmission(Decoded_data *_start_gearstick_throttle, std::atomic<bool> *exit_flag);
 
@@ -25,11 +25,14 @@ int main() {
             }
 
     Decoded_data decoded;
+    decoded.temperature =0;  //delete after we add default values
 
     std::atomic<bool> exit_flag(false);
 
     std::thread CANReaderThread(Reader, &decoded, &exit_flag, std::ref(sockat_can), std::ref(socket_dash));
     std::thread EngineTransmissionThread(Engine_Transmission, &decoded, &exit_flag);
+    Emulator temp;
+    temp.CalculateTempeture(&decoded); 
 
     CANReaderThread.join();
     EngineTransmissionThread.join();
