@@ -80,11 +80,8 @@ void Emulator::CalculateOilWaterTemperature(Decoded_data *_data, std::atomic<boo
 
 void Emulator::CalculateSpeed(Decoded_data *_data, const double _max_speed)
 {
-    if (_data->speed < _max_speed)
-    {
-        double throttle_ratio = _max_speed / max_throttle;
-        _data->speed = (_data->decoded_throttle * throttle_ratio);
-    }
+    double throttle_ratio = _max_speed / max_throttle;
+    _data->speed = (_data->decoded_throttle * throttle_ratio);
 }
 
 void Emulator::CalculateGearNum(Decoded_data *_data)
