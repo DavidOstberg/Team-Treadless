@@ -18,9 +18,9 @@ const static int reverse = 114;
 const static int on = 115;
 const static int decelerate = 50; //258
 const static int accelerate = 56; //259
-const static int min_temperature = 0;
+const static int max_water_temperature = 150;
 const static int delta_temperature = 5;
-const static int max_temperature = 100;
+const static int max_oil_temperature = 110;
 const static int idle = 800;
 const static int max_speed_drive = 250;
 const static int max_speed_reverse = 40;
@@ -53,7 +53,9 @@ public:
     void CalculateSpeedRPMGearLevel(Decoded_data*, std::atomic<bool> *);
 
     void CalculateRPMInNeutral(Decoded_data*);
-    void CalculateTempeture(Decoded_data *_data);
+    void CalculateOilWaterTemperature(Decoded_data *_data);
+    void CalculateFuel(Decoded_data *_data);
+    
 
 };
 

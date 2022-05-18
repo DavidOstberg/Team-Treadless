@@ -65,10 +65,40 @@ void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
         this->InstrumentCluster.setTXT("Treadless");
         // this->InstrumentCluster.setIcon(&p);
         this->InstrumentCluster.setOilTemperatureGauges(_frame->data[6]);
+        this->InstrumentCluster.setTemperatureGauges(_frame->data[7]);
+        this->InstrumentCluster.setFuelGauges(220);
+        struct _icons  p;// = reinterpret_cast<struct _icons * >((_frame->data));
+        static bool once = false;
 
+        if (!once) {
+            
+            //p.hazard = 1;
+            _icons p{};
+            p.battery =1;
+
+            once = true;
+        } else
+            p.hazard = 0;
+        this->InstrumentCluster.setIcon(&p);
+       
 
     }
         break;
+    // case CAN::MSG::ICONSS_ID:
+    //     struct _icons  p;// = reinterpret_cast<struct _icons * >((_frame->data));
+    //     static bool once = false;
+
+    //     if (!once) {
+    //         p.hazard = 1;
+            
+    //         _icons p{};
+    //         p.battery =1;
+    //         once = true;
+    //     } else
+    //         p.hazard = 0;
+    //     this->InstrumentCluster.setIcon(&p);
+       
+        // break; 
     default:
         break;
     }

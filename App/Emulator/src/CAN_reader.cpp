@@ -65,8 +65,8 @@ void SendToDashboard(Decoded_data *_decoded, scpp::SocketCan &socket_dash)
 
     cf_to_dashboard.data[3] = _decoded->gear_num;
 
-    cf_to_dashboard.data[6] = _decoded->temperature;
-
+    cf_to_dashboard.data[6] = _decoded->oil_temperature;
+    cf_to_dashboard.data[7] = _decoded->water_temperature;
 
     cf_to_dashboard.data[4] = packed_rpm.FirstDigitRPM(_decoded->rpm);
     cf_to_dashboard.data[5] = packed_rpm.SecondDigitRPM(_decoded->rpm);
