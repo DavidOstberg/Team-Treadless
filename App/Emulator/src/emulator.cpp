@@ -68,6 +68,8 @@ while (!_exit_flag->load()){
         _data->gear_num = 0;
         _data->rpm = 0;
         _data->speed = 0;
+        _data->water_temperature = 0;
+        _data->oil_temperature = 0;
     } 
 
     }
