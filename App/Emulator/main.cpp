@@ -30,13 +30,14 @@ int main() {
     std::thread EngineTransmissionThread(Engine_Transmission, &decoded, &exit_flag);
 
     Emulator temp;
-    decoded.temperature = 0;  //delete after we add default values
-
-    temp.CalculateTempeture(&decoded, &exit_flag); 
-
+  
+    decoded.oil_temperature = 0;  //delete after we add default values
+    decoded.water_temperature = 30;  //delete after we add default values
+    
+    temp.CalculateOilWaterTemperature(&decoded, &exit_flag); 
+    
     CANReaderThread.join();
     EngineTransmissionThread.join();
-
 
     return 0;
 }

@@ -18,7 +18,7 @@ void Emulator::CalculateSpeedRPMGearLevel(Decoded_data *_data, std::atomic<bool>
 
                 _data->speed = 0;
                 _data->rpm = idle;
-                _data->gear_num = 0;
+
 
                 break;
 
@@ -52,7 +52,6 @@ void Emulator::CalculateSpeedRPMGearLevel(Decoded_data *_data, std::atomic<bool>
 
             printing(_data);
         }
-
         else
         { // ignition OFF
             _data->decoded_gear_stick = 1;
@@ -60,26 +59,31 @@ void Emulator::CalculateSpeedRPMGearLevel(Decoded_data *_data, std::atomic<bool>
             _data->gear_num = 0;
             _data->rpm = 0;
             _data->speed = 0;
-            _data->temperature = 0;
+            _data->water_temperature = 0;
+            _data->oil_temperature = 0;
         }
     }
 }
 
-void Emulator::CalculateTempeture(Decoded_data *_data, std::atomic<bool> *_exit_flag)
+void Emulator::CalculateOilWaterTemperature(Decoded_data *_data, std::atomic<bool> *_exit_flag)
 {
-    while ((_data->temperature < max_temperature) && (!_exit_flag->load()))
+    while ((_data->oil_temperature < max_oil_temperature)&&(_data->water_temperature < max_water_temperature)&& (!_exit_flag->load()))
     {
-        _data->temperature += delta_temperature;
+        _data->oil_temperature +=   delta_temperature;
         std::this_thread::sleep_for(std::chrono::seconds(3));
-        std::cout << "TEMPERATURE = " << _data->temperature << std::endl;
-    }
+        std::cout << "OIL TEMPERATURE = " << _data->oil_temperature << std::endl;
+        _data->water_temperature += delta_temperature;
+        std::cout << "WATER TEMPERATURE = " << _data->water_temperature << std::endl;
+    }    
 }
+
 
 void Emulator::CalculateSpeed(Decoded_data *_data, const double _max_speed)
 {
-    if (_data->speed < _max_speed){
-    double throttle_ratio = _max_speed / max_throttle;
-    _data->speed = (_data->decoded_throttle * throttle_ratio);
+    if (_data->speed < _max_speed)
+    {
+        double throttle_ratio = _max_speed / max_throttle;
+        _data->speed = (_data->decoded_throttle * throttle_ratio);
     }
 }
 
@@ -166,7 +170,9 @@ void printing(Decoded_data *_data)
     std::cout << "Speed = " << _data->speed << std::endl;
     std::cout << "RPM = " << _data->rpm << std::endl;
     std::cout << std::endl;
-    std::cout << "TEMPERATURE = " << _data->temperature << std::endl;
+    std::cout << "OIL TEMPERATURE = " << _data->oil_temperature << std::endl;
+    std::cout << std::endl;
+    std::cout << "WATER TEMPERATURE = " << _data->water_temperature << std::endl;
     std::cout << std::endl;
 
     std::this_thread::sleep_for(std::chrono::seconds(1));

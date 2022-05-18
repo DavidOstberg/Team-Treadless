@@ -17,15 +17,12 @@ const static int on = 115;
 const static int esc = 113;   //(Graceful shutdown)
 const static int decelerate = 50; //258
 const static int accelerate = 56; //259
-const static int min_temperature = 0;
+const static int max_water_temperature = 150;
 const static int delta_temperature = 5;
-const static int max_temperature = 100;
+const static int max_oil_temperature = 110;
 const static int idle = 800;
 const static int max_speed_drive = 250;
 const static int max_speed_reverse = 40;
-
-const static int shutdown = 113;
-
 const static float kmh_mph = 0.62;
 
 class Decoding
@@ -48,7 +45,6 @@ class Emulator
 {
 public:
 
-
     void CalculateSpeedRPMGearLevel(Decoded_data*, std::atomic<bool> *);
 
     void CalculateSpeed(Decoded_data *, const double);
@@ -59,8 +55,9 @@ public:
 
     void CalculateRPMInNeutral(Decoded_data*);
 
-    void CalculateTempeture(Decoded_data *,  std::atomic<bool> *);
-
+    void CalculateOilWaterTemperature(Decoded_data *_data, std::atomic<bool> *);
+  
+    void CalculateFuel(Decoded_data *_data, std::atomic<bool> *);
 };
 
 void Engine_Transmission(Decoded_data *, std::atomic<bool> *);

@@ -37,7 +37,8 @@ void Reader(Decoded_data *_decoded, std::atomic<bool> *_exit_flag, scpp::SocketC
                 _decoded->gear_num = 0;
                 _decoded->rpm = 0;
                 _decoded->speed = 0; 
-                _decoded->temperature = 0; 
+                _decoded->water_temperature = 0;
+                _decoded->oil_temperature = 0;
             
                 std::cout << " Exit Flag is " << _exit_flag->load() << std::endl;
                 
@@ -60,7 +61,6 @@ void Reader(Decoded_data *_decoded, std::atomic<bool> *_exit_flag, scpp::SocketC
     }
 }
 
-/***Send to dashboard for testing*****************/
 void SendToDashboard(Decoded_data *_decoded, scpp::SocketCan &socket_dash)
 {
     scpp::CanFrame cf_to_dashboard;
@@ -73,13 +73,13 @@ void SendToDashboard(Decoded_data *_decoded, scpp::SocketCan &socket_dash)
     cf_to_dashboard.data[0] = _decoded->decoded_start;
     cf_to_dashboard.data[1] = _decoded->decoded_gear_stick;
     cf_to_dashboard.data[2] = _decoded->speed;
-
     cf_to_dashboard.data[3] = _decoded->gear_num;
 
     cf_to_dashboard.data[4] = packed_rpm.FirstDigitRPM(_decoded->rpm);
     cf_to_dashboard.data[5] = packed_rpm.SecondDigitRPM(_decoded->rpm);
-
-    cf_to_dashboard.data[6] = _decoded->temperature;
+  
+    cf_to_dashboard.data[6] = _decoded->oil_temperature;
+    cf_to_dashboard.data[7] = _decoded->water_temperature;
 
     socket_dash.write(cf_to_dashboard);
 }
