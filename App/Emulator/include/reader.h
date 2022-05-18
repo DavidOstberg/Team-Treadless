@@ -20,8 +20,6 @@
 
     };
 
-
-
 void Reader(Decoded_data *, std::atomic<bool> *, scpp::SocketCan&, scpp::SocketCan&);
 
 //testing for sending to dashboard

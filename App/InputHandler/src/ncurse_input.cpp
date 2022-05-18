@@ -1,17 +1,15 @@
-#include <curses.h>
-#include <iostream>
+
 #include "keyMapping.hpp"
 #include "ncurseInput.hpp"
 
-void ncurseInput(uint8_t array[])
+bool ncurseInput(uint8_t array[])
 {
-
     int ch;
-    //initscr();
+    bool exit = false;  //in order to down the while loop of InputHandle when we enter 'q' (Graceful shutdown)
 
     if (((ch) = getch()) != ERR)
     {
-        if (ch == key_s ||ch == key_o)
+        if (ch == key_s || ch == key_o)
         {
             array[0] = ch;
         }
@@ -23,16 +21,25 @@ void ncurseInput(uint8_t array[])
         {
             array[2] = ch;
         }
+        else if (ch == key_esc)  //(Graceful shutdown)
+        {
+            array[0] = key_o;
+            array[3] = ch; // to kill Emulator
+            exit = true;  // to kill Input Handler
+        }
         else
         {
-            std::cout << "not valid input \r\n";
+            std::cout << ch <<" not valid input \r\n";
         }
     }
-    else{
+    else
+    {
         array[1] = 0;
         array[2] = 0;
     }
+    return exit;  // we return the bool of case ch == key_esc
 }
+
 
 /*void ncurseInput(uint8_t array[]) {
     initscr();

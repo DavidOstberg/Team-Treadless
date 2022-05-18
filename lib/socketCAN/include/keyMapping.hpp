@@ -9,7 +9,8 @@ enum keyMapping
     key_p = 'p', //112,
     key_r = 'r', //114,
     key_up = '8',
-    key_down = '2'
+    key_down = '2',
+    key_esc = 'q', //113
 };
 
 #endif
