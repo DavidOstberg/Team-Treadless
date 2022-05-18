@@ -6,6 +6,7 @@
 
 void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
 
+
     std::cout<< "CAN ID  "<< _frame->can_id<< std::endl;
    // std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
@@ -87,7 +88,6 @@ yourStuff::yourStuff(const std::string &_ifName, QObject *_vs) {
 
 bool yourStuff::run() {
     bool ret = true;
-    //CANOpener::ReadStatus status = CANOpener::ReadStatus::OK;
     canfd_frame frame;
     CANOpener::ReadStatus status = this->CANReader.read(&frame);
     /*while*/if ((status == CANOpener::ReadStatus::OK)&&(frame.can_id==0x123)) {

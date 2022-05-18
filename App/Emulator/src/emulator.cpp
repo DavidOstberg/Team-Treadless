@@ -2,29 +2,23 @@
 
 void Engine_Transmission(Decoded_data *_data, std::atomic<bool> *_exit_flag)
 {
-
     Emulator emulator;
     emulator.CalculateSpeedRPMGearLevel(_data, _exit_flag);
 }
 
 void Emulator::CalculateSpeedRPMGearLevel(Decoded_data *_data, std::atomic<bool> *_exit_flag)
 {
-
     while (!_exit_flag->load())
     {
-
         if (_data->decoded_start)
         {
-
             switch (_data->decoded_gear_stick)
             {
-
             case 0: //Park
+
                 _data->speed = 0;
                 _data->rpm = idle;
                 _data->gear_num = 0;
-
-                printing(_data);
 
                 break;
 
@@ -34,8 +28,6 @@ void Emulator::CalculateSpeedRPMGearLevel(Decoded_data *_data, std::atomic<bool>
                 _data->gear_num = 0;
                 CalculateRPMInNeutral(_data);
 
-                printing(_data);
-
                 break;
 
             case 2: //Reverse only gear 1 - max 40km/h
@@ -43,8 +35,6 @@ void Emulator::CalculateSpeedRPMGearLevel(Decoded_data *_data, std::atomic<bool>
                 _data->gear_num = 1;
                 CalculateSpeed(_data, max_speed_reverse);
                 CalculateRPM(_data);
-
-                printing(_data);
 
                 break;
 
@@ -54,15 +44,13 @@ void Emulator::CalculateSpeedRPMGearLevel(Decoded_data *_data, std::atomic<bool>
                 CalculateGearNum(_data);
                 CalculateRPM(_data);
 
-                printing(_data);
-
                 break;
-
-            case 4: //
 
             default:
                 break;
             }
+
+            printing(_data);
         }
 
         else
@@ -72,13 +60,14 @@ void Emulator::CalculateSpeedRPMGearLevel(Decoded_data *_data, std::atomic<bool>
             _data->gear_num = 0;
             _data->rpm = 0;
             _data->speed = 0;
+            _data->temperature = 0;
         }
     }
 }
 
-void Emulator::CalculateTempeture(Decoded_data *_data)
+void Emulator::CalculateTempeture(Decoded_data *_data, std::atomic<bool> *_exit_flag)
 {
-    while (_data->temperature < max_temperature)
+    while ((_data->temperature < max_temperature) && (!_exit_flag->load()))
     {
         _data->temperature += delta_temperature;
         std::this_thread::sleep_for(std::chrono::seconds(3));
@@ -88,8 +77,10 @@ void Emulator::CalculateTempeture(Decoded_data *_data)
 
 void Emulator::CalculateSpeed(Decoded_data *_data, const double _max_speed)
 {
+    if (_data->speed < _max_speed){
     double throttle_ratio = _max_speed / max_throttle;
-    _data->speed = _data->decoded_throttle * throttle_ratio;
+    _data->speed = (_data->decoded_throttle * throttle_ratio);
+    }
 }
 
 void Emulator::CalculateGearNum(Decoded_data *_data)
@@ -126,30 +117,6 @@ void Emulator::CalculateGearNum(Decoded_data *_data)
 
 void Emulator::CalculateRPM(Decoded_data *_data)
 {
-    /*int rpm; = 0 + idle;
-
-    if(_data->speed >= 0 && _data->speed <= 60){
-        _data->speed -
-    }
-    else if(_data->speed > 60 && _data->speed <= 80){
-        _data->gear_num = 2;
-    }
-    else if(_data->speed > 80 && _data->speed <= 118){
-        _data->gear_num = 3;
-    }
-    else if(_data->speed > 118 && _data->speed <= 170){
-        _data->gear_num = 4;
-    }
-    else if(_data->speed > 170 && _data->speed <= 200){
-        _data->gear_num = 5;
-    }
-    else if(200 < _data->speed){
-        _data->gear_num = 6;
-    }
-    else{
-        std::cout << "Transmission failure";
-    }*/
-
     int gear_num_ratio;
     if (_data->gear_num == 1 && _data->speed <= 60)
     {
@@ -182,16 +149,15 @@ void Emulator::CalculateRPMInNeutral(Decoded_data *_data)
 int Packing_RPM::FirstDigitRPM(int rpm)
 {
     return rpm / 100;
-};
+}
 
 int Packing_RPM::SecondDigitRPM(int rpm)
 {
     return rpm % 100;
-};
+}
 
 void printing(Decoded_data *_data)
 {
-
     std::cout << std::endl;
     std::cout << "Gear stick = " << _data->decoded_gear_stick << std::endl;
     std::cout << "Gear Num = " << _data->gear_num << std::endl;
