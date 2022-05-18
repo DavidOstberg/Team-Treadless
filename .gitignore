@@ -2,3 +2,4 @@
 # and folders when pushed:
 **/build
 **/.vscode
+**/buildDBG

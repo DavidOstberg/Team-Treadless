@@ -7,7 +7,7 @@
 void yourStuff::YouHaveJustRecievedACANFrame(const canfd_frame * const _frame) {
 
     std::cout<< "CAN ID  "<< _frame->can_id<< std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+   // std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 
     switch (_frame->can_id) {

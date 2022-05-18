@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <thread>
+
 
 int main() {
     scpp::SocketCan sockat_can;
@@ -18,11 +20,11 @@ int main() {
 
     initscr();
 
-  /*   cbreak();
+    cbreak();
     noecho();
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
- */
+
 
 
     while (true) {
@@ -36,6 +38,8 @@ int main() {
         memcpy(cf_to_write.data, input_array, sizeof(input_array));
 
         auto write_sc_status = sockat_can.write(cf_to_write);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
         if (write_sc_status != scpp::STATUS_OK)
             printf("something went wrong on socket write, error code : %d \r\n", int32_t(write_sc_status));
         else
