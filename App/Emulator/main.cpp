@@ -25,15 +25,19 @@ int main() {
             }
 
     Decoded_data decoded;
-    decoded.temperature =0;  //delete after we add default values
+    decoded.oil_temperature =0;  //delete after we add default values
+    decoded.water_temperature =30;  //delete after we add default values
 
     std::atomic<bool> exit_flag(false);
 
     std::thread CANReaderThread(Reader, &decoded, &exit_flag, std::ref(sockat_can), std::ref(socket_dash));
     std::thread EngineTransmissionThread(Engine_Transmission, &decoded, &exit_flag);
-    Emulator temp;
-    temp.CalculateTempeture(&decoded); 
 
+    Emulator temp;
+
+    
+    temp.CalculateOilWaterTemperature(&decoded); 
+    
     CANReaderThread.join();
     EngineTransmissionThread.join();
 

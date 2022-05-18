@@ -13,8 +13,11 @@
     int speed;
     int gear_num;
     int rpm;
-    int temperature;
-    std::mutex m;
+
+    int oil_temperature;
+    int water_temperature;
+    std::mutex m;  
+
     };
 
 

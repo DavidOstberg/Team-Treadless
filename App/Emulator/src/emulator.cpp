@@ -16,13 +16,15 @@ void Emulator::CalculateSpeedRPMGearLevel(Decoded_data *_data, std::atomic<bool>
         if (_data->decoded_start)
         {
 
+ 
+
             switch (_data->decoded_gear_stick)
             {
 
             case 0: //Park
                 _data->speed = 0;
                 _data->rpm = idle;
-                _data->gear_num = 0;
+
 
                 printing(_data);
 
@@ -65,26 +67,39 @@ void Emulator::CalculateSpeedRPMGearLevel(Decoded_data *_data, std::atomic<bool>
             }
         }
 
-        else
-        { // ignition OFF
-            _data->decoded_gear_stick = 1;
-            _data->decoded_throttle = 0;
-            _data->gear_num = 0;
-            _data->rpm = 0;
-            _data->speed = 0;
-        }
+    }
+    
+    else {  // ignition OFF
+        _data->decoded_gear_stick = 1;
+        _data->decoded_throttle = 0;
+        _data->gear_num = 0;
+        _data->rpm = 0;
+        _data->speed = 0;
+        _data->water_temperature = 0;
+        _data->oil_temperature = 0;
+    } 
+
+
+        
     }
 }
 
-void Emulator::CalculateTempeture(Decoded_data *_data)
+void Emulator::CalculateOilWaterTemperature(Decoded_data *_data)
 {
-    while (_data->temperature < max_temperature)
+
+  
+    while ((_data->oil_temperature < max_oil_temperature)&&(_data->water_temperature < max_water_temperature))
     {
-        _data->temperature += delta_temperature;
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-        std::cout << "TEMPERATURE = " << _data->temperature << std::endl;
-    }
+    _data->oil_temperature +=   delta_temperature;
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::cout << "OIL TEMPERATURE = " << _data->oil_temperature << std::endl;
+    _data->water_temperature += delta_temperature;
+     std::cout << "WATER TEMPERATURE = " << _data->water_temperature << std::endl;
+
+    }    
+
 }
+
 
 void Emulator::CalculateSpeed(Decoded_data *_data, const double _max_speed)
 {
@@ -200,7 +215,9 @@ void printing(Decoded_data *_data)
     std::cout << "Speed = " << _data->speed << std::endl;
     std::cout << "RPM = " << _data->rpm << std::endl;
     std::cout << std::endl;
-    std::cout << "TEMPERATURE = " << _data->temperature << std::endl;
+    std::cout << "OIL TEMPERATURE = " << _data->oil_temperature << std::endl;
+    std::cout << std::endl;
+    std::cout << "WATER TEMPERATURE = " << _data->water_temperature << std::endl;
     std::cout << std::endl;
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
